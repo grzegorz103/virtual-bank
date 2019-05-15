@@ -50,10 +50,16 @@ namespace BankOnline.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,TransactionDate,FromID,ToID")] Transaction transaction)
+        public ActionResult Create([Bind(Include = "ID,TransactionDate,FromID,ToID,Amount")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
+                BankAccount fr = db.BankAccounts.Single(e => e.ID == transaction.FromID);
+                BankAccount target = db.BankAccounts.Single(e => e.ID == transaction.ToID);
+                if (fr.Balance < transaction.Amount)
+                    return RedirectToAction("Index");
+                target.Balance += transaction.Amount;
+                fr.Balance -= transaction.Amount;
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -86,7 +92,7 @@ namespace BankOnline.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,TransactionDate,FromID,ToID")] Transaction transaction)
+        public ActionResult Edit([Bind(Include = "ID,TransactionDate,FromID,ToID,Amount")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {

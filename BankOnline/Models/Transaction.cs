@@ -11,7 +11,7 @@ namespace BankOnline.Models
         public DateTime TransactionDate { get; set; }
         public int? FromID { get; set; }
         public int? ToID { get; set; }
-
+        public float Amount { get; set; }
         public virtual BankAccount From { get; set; }
         public virtual BankAccount To { get; set; }
     }
