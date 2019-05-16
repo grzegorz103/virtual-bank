@@ -14,6 +14,8 @@ namespace BankOnline
         public DbSet<BankAccount> BankAccounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Profile> Profiles { get; set; }
+        public DbSet<InvestmentType> InvestmentTypes { get; set; }
+        public DbSet<Investment> Investments { get; set; }
 
         public BankContext() : base("DefaultConnection")
         {

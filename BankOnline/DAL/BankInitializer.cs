@@ -61,7 +61,14 @@ namespace BankOnline.DAL
             userManager.AddToRole(user2.Id, "ADMIN");
             userManager.AddToRole(user3.Id, "ADMIN");
 
+            context.SaveChanges();
 
+            var investmentTypes = new List<InvestmentType>
+            {
+                new InvestmentType{Name="Zwykla", Percentage=4}
+            };
+
+            investmentTypes.ForEach(e => context.InvestmentTypes.Add(e));
             context.SaveChanges();
         }
     }

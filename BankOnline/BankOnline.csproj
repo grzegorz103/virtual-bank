@@ -174,6 +174,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\BankAccountsController.cs" />
+    <Compile Include="Controllers\InvestmentsController.cs" />
     <Compile Include="Controllers\ProfilesController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="DAL\BankContext.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="Models\BankAccount.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Investment.cs" />
+    <Compile Include="Models\InvestmentType.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Profile.cs" />
     <Compile Include="Models\Transaction.cs" />
@@ -267,6 +269,11 @@
     <Content Include="Views\Transactions\Details.cshtml" />
     <Content Include="Views\Transactions\Edit.cshtml" />
     <Content Include="Views\Transactions\Index.cshtml" />
+    <Content Include="Views\Investments\Create.cshtml" />
+    <Content Include="Views\Investments\Delete.cshtml" />
+    <Content Include="Views\Investments\Details.cshtml" />
+    <Content Include="Views\Investments\Edit.cshtml" />
+    <Content Include="Views\Investments\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
