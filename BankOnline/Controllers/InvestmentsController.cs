@@ -135,6 +135,8 @@ namespace BankOnline.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Investment investment = db.Investments.Find(id);
+            BankAccount bankAccount = db.BankAccounts.Single(e => e.ID == investment.BankAccountID);
+            bankAccount.Balance += investment.Balance;
             db.Investments.Remove(investment);
             db.SaveChanges();
             return RedirectToAction("Index");

@@ -1,0 +1,66 @@
+﻿@model BankOnline.Models.Credit
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Credit</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Profile.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Profile.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Balance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Balance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BalancePaid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BalancePaid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InstallmentNums)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InstallmentNums)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StatusDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StatusDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreditType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreditType)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

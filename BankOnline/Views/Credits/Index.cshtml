@@ -1,0 +1,63 @@
+﻿@model IEnumerable<BankOnline.Models.Credit>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Profile.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Balance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BalancePaid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InstallmentNums)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StatusDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreditType)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Profile.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Balance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BalancePaid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InstallmentNums)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StatusDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreditType)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>

@@ -9,7 +9,7 @@ using System.Web;
 
 namespace BankOnline.DAL
 {
-    public class BankInitializer : DropCreateDatabaseIfModelChanges<BankContext>
+    public class BankInitializer : DropCreateDatabaseAlways<BankContext>
     {
         protected override void Seed(BankContext context)
         {
@@ -17,7 +17,7 @@ namespace BankOnline.DAL
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
 
             roleManager.Create(new IdentityRole("ADMIN"));
-         
+            roleManager.Create(new IdentityRole("USER"));
 
             var addresses = new List<Address>
             {
@@ -29,12 +29,11 @@ namespace BankOnline.DAL
             context.SaveChanges();
 
 
-
             var profiles = new List<Profile>
             {
-                new Profile{Name = "Jan", Surname = "Kowalski", UserName="493385326"},
-                new Profile{Name = "Michal", Surname = "Michalski",   UserName="243265254"},
-                new Profile{Name = "Anna", Surname = "Annowska", UserName="678634125"},
+                new Profile{Name = "Jan", Surname = "Kowalski", UserName="jan@kowalski.pl"},
+                new Profile{Name = "Michal", Surname = "Michalski",   UserName="michal@michalski.pl"},
+                new Profile{Name = "Anna", Surname = "Annowska", UserName="anna@annowska.pl"},
             };
 
             profiles.ForEach(e => context.Profiles.Add(e));
@@ -50,9 +49,10 @@ namespace BankOnline.DAL
             context.SaveChanges();
 
          
-            var user = new ApplicationUser { UserName = "493385326" };
-            var user2 = new ApplicationUser { UserName = "243265254" };
-            var user3 = new ApplicationUser { UserName = "678634125" };
+            var user = new ApplicationUser { UserName = "jan@kowalski.pl" };
+            var user2 = new ApplicationUser { UserName = "michal@michalski.pl" };
+            var user3 = new ApplicationUser { UserName = "anna@annowska.pl" };
+
             userManager.Create(user, "dssdSDk@422!");
             userManager.Create(user2, "Ksdc@)32");
             userManager.Create(user3, "sdS@!sc3");
@@ -70,6 +70,17 @@ namespace BankOnline.DAL
 
             investmentTypes.ForEach(e => context.InvestmentTypes.Add(e));
             context.SaveChanges();
+
+            var credits = new List<Credit>
+            {
+                new Credit{ Balance = 10000, BalancePaid = 2000, CreditType = CreditType.AWAITING, InstallmentNums = 2, BankAccountID = 1,
+                StatusDate = DateTime.Now},
+                      new Credit{ Balance = 25000, BalancePaid = 3000, CreditType = CreditType.AWAITING, InstallmentNums = 3, BankAccountID = 1,
+                StatusDate = DateTime.Now},
+            };
+            credits.ForEach(e => context.Credits.Add(e));
+            context.SaveChanges();
+
         }
     }
 }

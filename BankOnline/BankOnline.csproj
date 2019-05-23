@@ -174,6 +174,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\BankAccountsController.cs" />
+    <Compile Include="Controllers\CreditsController.cs" />
     <Compile Include="Controllers\InvestmentsController.cs" />
     <Compile Include="Controllers\ProfilesController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
@@ -188,6 +189,8 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\BankAccount.cs" />
+    <Compile Include="Models\Credit.cs" />
+    <Compile Include="Models\CreditType.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Investment.cs" />
     <Compile Include="Models\InvestmentType.cs" />
@@ -274,6 +277,12 @@
     <Content Include="Views\Investments\Details.cshtml" />
     <Content Include="Views\Investments\Edit.cshtml" />
     <Content Include="Views\Investments\Index.cshtml" />
+    <Content Include="Views\Credits\Create.cshtml" />
+    <Content Include="Views\Credits\Delete.cshtml" />
+    <Content Include="Views\Credits\Details.cshtml" />
+    <Content Include="Views\Credits\Edit.cshtml" />
+    <Content Include="Views\Credits\Index.cshtml" />
+    <Content Include="Views\Credits\All.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -13,5 +13,6 @@ namespace BankOnline.Models
         public string Surname { get; set; }
 
         public virtual ICollection<BankAccount> BankAccounts { get; set; }
+        public virtual ICollection<Credit> Credits { get; set; }
     }
 }
