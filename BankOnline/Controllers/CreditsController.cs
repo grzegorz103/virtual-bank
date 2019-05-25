@@ -72,7 +72,7 @@ namespace BankOnline.Controllers
         // GET: Credits/Create
         public ActionResult Create()
         {
-            ViewBag.ProfileID = new SelectList(db.Profiles, "ID", "UserName");
+            ViewBag.BankAccountID = new SelectList(db.BankAccounts, "ID", "Number");
             return View();
         }
 
@@ -125,6 +125,14 @@ namespace BankOnline.Controllers
             }
             ViewBag.ProfileID = new SelectList(db.Profiles, "ID", "UserName", credit.BankAccount);
             return View(credit);
+        }
+
+        public ActionResult UserCredits()
+        {
+            Profile profile = db.Profiles.Single(p => p.UserName == User.Identity.Name);
+            ICollection<BankAccount> accounts = profile.BankAccounts;
+            var credits = accounts.SelectMany(e => e.Credits);
+            return View(credits);
         }
 
         // GET: Credits/Delete/5

@@ -26,7 +26,7 @@ namespace BankOnline
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Transaction>()
-                .HasOptional<BankAccount>(t=>t.From)
+                .HasOptional<BankAccount>(t => t.From)
                 .WithMany(b => b.TransactionFrom)
                 .HasForeignKey(t => t.FromID)
                 .WillCascadeOnDelete(false);
@@ -36,7 +36,10 @@ namespace BankOnline
             .WithMany(b => b.TransactionTo)
             .HasForeignKey(t => t.ToID)
             .WillCascadeOnDelete(false);
+            base.OnModelCreating(modelBuilder);
+           
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
+        
     }
 }

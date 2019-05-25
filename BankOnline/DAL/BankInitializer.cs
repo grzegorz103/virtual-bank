@@ -9,16 +9,17 @@ using System.Web;
 
 namespace BankOnline.DAL
 {
-    public class BankInitializer : DropCreateDatabaseAlways<BankContext>
+    public class BankInitializer : DropCreateDatabaseIfModelChanges<BankContext>
     {
         protected override void Seed(BankContext context)
         {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
-
+           
             roleManager.Create(new IdentityRole("ADMIN"));
             roleManager.Create(new IdentityRole("USER"));
 
+            context.SaveChanges();
             var addresses = new List<Address>
             {
                 new Address{ City = "Warszawa", Street = "Warszawska", HouseNumber = 1, PostCode = "21-222"},
@@ -48,7 +49,7 @@ namespace BankOnline.DAL
             bankAccounts.ForEach(e => context.BankAccounts.Add(e));
             context.SaveChanges();
 
-         
+
             var user = new ApplicationUser { UserName = "jan@kowalski.pl" };
             var user2 = new ApplicationUser { UserName = "michal@michalski.pl" };
             var user3 = new ApplicationUser { UserName = "anna@annowska.pl" };
@@ -80,7 +81,7 @@ namespace BankOnline.DAL
             };
             credits.ForEach(e => context.Credits.Add(e));
             context.SaveChanges();
-
+            
         }
     }
 }

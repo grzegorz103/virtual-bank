@@ -10,6 +10,7 @@ namespace BankOnline.Models
         public int ID { get; set; }
         public DateTime TransactionDate { get; set; }
         public int? FromID { get; set; }
+        public int MyProperty { get; set; }
         public int? ToID { get; set; }
         public float Amount { get; set; }
         public virtual BankAccount From { get; set; }

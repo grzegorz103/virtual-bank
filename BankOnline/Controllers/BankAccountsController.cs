@@ -22,6 +22,15 @@ namespace BankOnline.Controllers
             return View(bankAccounts.ToList());
         }
 
+        public ActionResult My()
+        {
+            var bankAccounts = db.BankAccounts
+                .Include(e => e.Profile)
+                .Where(e => e.Profile.UserName == User.Identity.Name);
+
+                return View(bankAccounts.ToList());
+        }
+
         // GET: BankAccounts/Details/5
         public ActionResult Details(int? id)
         {

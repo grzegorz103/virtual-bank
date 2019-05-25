@@ -20,6 +20,7 @@ namespace BankOnline
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             Database.SetInitializer(new BankInitializer());
-        }
+        
+        }   
     }
 }
