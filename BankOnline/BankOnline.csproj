@@ -193,6 +193,7 @@
     <Compile Include="Models\CreditType.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Investment.cs" />
+    <Compile Include="Models\InvestmentGroup.cs" />
     <Compile Include="Models\InvestmentType.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Profile.cs" />

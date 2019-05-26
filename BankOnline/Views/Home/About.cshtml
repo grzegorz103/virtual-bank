@@ -1,7 +1,28 @@
-﻿@{
+﻿@model IEnumerable<BankOnline.Models.InvestmentGroup>
+@{
     ViewBag.Title = "About";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+<h2>Total Investments Statistics</h2>
 
-<p>Use this area to provide additional information.</p>
+<table>
+    <tr>
+        <th>
+            Investment type
+        </th>
+        <th>
+            Balance
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @item.Balance
+            </td>
+        </tr>
+    }
+</table>

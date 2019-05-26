@@ -67,10 +67,21 @@ namespace BankOnline.DAL
 
             var investmentTypes = new List<InvestmentType>
             {
-                new InvestmentType{Name="Zwykla", Percentage=4}
+                new InvestmentType{Name="Zwykla", Percentage=4},
+                new InvestmentType{Name="Duzy zysk", Percentage=5}
             };
 
             investmentTypes.ForEach(e => context.InvestmentTypes.Add(e));
+            context.SaveChanges();
+
+            var investments = new List<Investment>
+            {
+                new Investment{BankAccountID = 1, InvestmentTypeID = 1, Balance = 100.00f, VisitDate = DateTime.Now},
+                new Investment{BankAccountID = 1, InvestmentTypeID = 1, Balance = 100.00f, VisitDate= DateTime.Now},
+                new Investment{BankAccountID = 2, InvestmentTypeID = 2, Balance = 50.00f, VisitDate = DateTime.Now}
+            };
+
+            investments.ForEach(e => context.Investments.Add(e));
             context.SaveChanges();
 
             var credits = new List<Credit>

@@ -23,9 +23,14 @@ namespace BankOnline.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            IQueryable<InvestmentGroup> data = from investment in db.Investments
+                                               group investment by investment.InvestmentType into invGroup
+                                               select new InvestmentGroup()
+                                               {
+                                                   Type = invGroup.Key.Name,
+                                                   Balance = invGroup.Sum(e => e.Balance)
+                                               };
+            return View(data.ToList());
         }
 
         public ActionResult Contact()
@@ -33,6 +38,9 @@ namespace BankOnline.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
-        }
-    }
+        }protected override void Dispose(bool disposing)
+{
+    db.Dispose();
+    base.Dispose(disposing);
+}   }
 }
