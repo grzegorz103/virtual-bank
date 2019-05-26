@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using BankOnline;
 using BankOnline.Models;
+using PagedList;
+
 
 namespace BankOnline.Controllers
 {
@@ -16,10 +18,48 @@ namespace BankOnline.Controllers
         private BankContext db = new BankContext();
 
         // GET: BankAccounts
-        public ActionResult Index()
+        public ViewResult Index(string sortOrder, string searchString, string currentFilter, int? page)
         {
-            var bankAccounts = db.BankAccounts.Include(b => b.Profile);
-            return View(bankAccounts.ToList());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NumberSortParm = String.IsNullOrEmpty(sortOrder) ? "number_desc" : "";
+            ViewBag.BalanceSortParam = sortOrder == "balance" ? "balance_desc" : "balance";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            var bankAccounts = from s in db.BankAccounts select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                bankAccounts = bankAccounts.Where(s => s.Number.Contains(searchString)
+                                       || s.Profile.UserName.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "number_desc":
+                    bankAccounts = bankAccounts.OrderByDescending(s => s.Number);
+                    break;
+                case "balance":
+                    bankAccounts = bankAccounts.OrderBy(s => s.Balance);
+                    break;
+                case "balance_desc":
+                    bankAccounts = bankAccounts.OrderByDescending(s => s.Balance);
+                    break;
+                default:
+                    bankAccounts = bankAccounts.OrderBy(s => s.Number);
+                    break;
+            }
+
+
+            int pageSize = 2;
+            int pageNumber = (page ?? 1);
+            return View(bankAccounts.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult My()

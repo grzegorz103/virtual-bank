@@ -9,7 +9,11 @@ namespace BankOnline.Models
     public class BankAccount
     {
         public int ID { get; set; }
+
+        [StringLength(26)]
         public string Number { get; set; }
+
+        [DataType(DataType.Currency)]
         public float Balance { get; set; }
         public int ProfileID { get; set; }
         public virtual Profile Profile { get; set; }

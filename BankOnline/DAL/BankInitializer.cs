@@ -15,7 +15,7 @@ namespace BankOnline.DAL
         {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
-           
+
             roleManager.Create(new IdentityRole("ADMIN"));
             roleManager.Create(new IdentityRole("USER"));
 
@@ -30,11 +30,12 @@ namespace BankOnline.DAL
             context.SaveChanges();
 
 
+
             var profiles = new List<Profile>
             {
-                new Profile{Name = "Jan", Surname = "Kowalski", UserName="jan@kowalski.pl"},
-                new Profile{Name = "Michal", Surname = "Michalski",   UserName="michal@michalski.pl"},
-                new Profile{Name = "Anna", Surname = "Annowska", UserName="anna@annowska.pl"},
+                new Profile{Name = "Jan", Surname = "Kowalski", UserName="jan@kowalski.pl", AddressID=1},
+                new Profile{Name = "Michal", Surname = "Michalski",   UserName="michal@michalski.pl", AddressID=2},
+                new Profile{Name = "Anna", Surname = "Annowska", UserName="anna@annowska.pl", AddressID=3 },
             };
 
             profiles.ForEach(e => context.Profiles.Add(e));
@@ -42,9 +43,9 @@ namespace BankOnline.DAL
 
             var bankAccounts = new List<BankAccount>
             {
-                new BankAccount{Number = "2249000054516684537431475", Balance = 0, ProfileID = 1},
-                new BankAccount{Number = "64249000057186527449208640", Balance =  0, ProfileID = 2},
-                new BankAccount{Number = "63249000053283862487685011", Balance = 0, ProfileID = 3},
+                new BankAccount{Number = "2249000054516684537431475", Balance = 100.00f, ProfileID = 1},
+                new BankAccount{Number = "64249000057186527449208640", Balance =  100.00f, ProfileID = 2},
+                new BankAccount{Number = "63249000053283862487685011", Balance = 100.00f, ProfileID = 3},
             };
             bankAccounts.ForEach(e => context.BankAccounts.Add(e));
             context.SaveChanges();
@@ -81,7 +82,7 @@ namespace BankOnline.DAL
             };
             credits.ForEach(e => context.Credits.Add(e));
             context.SaveChanges();
-            
+
         }
     }
 }

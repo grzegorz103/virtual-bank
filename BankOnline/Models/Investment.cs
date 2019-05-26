@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -9,7 +10,11 @@ namespace BankOnline.Models
     {
         public int ID { get; set; }
         public int? BankAccountID { get; set; }
+
+        [DataType(DataType.Date)]
         public DateTime VisitDate { get; set; }
+        
+        [DataType(DataType.Currency)]
         public float Balance { get; set; }
         public int InvestmentTypeID { get; set; }
 

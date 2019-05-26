@@ -36,10 +36,15 @@ namespace BankOnline
             .WithMany(b => b.TransactionTo)
             .HasForeignKey(t => t.ToID)
             .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Profile>()
+                .HasOptional(a => a.Address)
+                .WithOptionalDependent(ad => ad.Profile);
+
             base.OnModelCreating(modelBuilder);
-           
+
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
-        
+
     }
 }
