@@ -18,7 +18,7 @@ namespace BankOnline.Controllers
         private BankContext db = new BankContext();
 
         // GET: BankAccounts
-        public ViewResult Index(string sortOrder, string searchString, string currentFilter, int? page)
+        public ViewResult Index(string sortOrder,  string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NumberSortParm = String.IsNullOrEmpty(sortOrder) ? "number_desc" : "";
