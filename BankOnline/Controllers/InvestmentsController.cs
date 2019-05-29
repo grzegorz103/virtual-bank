@@ -16,9 +16,29 @@ namespace BankOnline.Controllers
         private BankContext db = new BankContext();
 
         // GET: Investments
+        [Authorize(Roles = "ADMIN")]
         public ActionResult Index()
         {
             IQueryable<Investment> investments = db.Investments.Include(i => i.BankAccount).Include(i => i.InvestmentType);
+            investments.ToList().ForEach(e =>
+            {
+                DateTime date = DateTime.Now;
+                TimeSpan span = date - e.VisitDate;
+                float timeElapsed = Convert.ToSingle(span.TotalSeconds);
+                e.Balance = (float)Math.Round(e.Balance + ((((e.InvestmentType.Percentage * e.Balance) / 100) * (timeElapsed) / 10)), 2);
+                e.VisitDate = date;
+            });
+            db.SaveChanges();
+            return View(investments.ToList());
+        }
+
+        [Authorize(Roles = "ADMIN")]
+        public ActionResult My()
+        {
+            IQueryable<Investment> investments = db.Investments
+                .Include(i => i.BankAccount)
+                .Include(i => i.InvestmentType)
+                .Where(e => e.BankAccount.Profile.UserName == User.Identity.Name);
             investments.ToList().ForEach(e =>
             {
                 DateTime date = DateTime.Now;

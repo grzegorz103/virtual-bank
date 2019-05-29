@@ -61,7 +61,7 @@ namespace BankOnline.DAL
 
             userManager.AddToRole(user.Id, "ADMIN");
             userManager.AddToRole(user2.Id, "ADMIN");
-            userManager.AddToRole(user3.Id, "ADMIN");
+            userManager.AddToRole(user3.Id, "USER");
 
             context.SaveChanges();
 

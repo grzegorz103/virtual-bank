@@ -16,6 +16,7 @@ namespace BankOnline.Controllers
         private BankContext db = new BankContext();
 
         // GET: Credits
+        [Authorize(Roles = "ADMIN")]
         public ActionResult Index()
         {
             var credits = db.Credits.Include(c => c.BankAccount);
@@ -23,6 +24,7 @@ namespace BankOnline.Controllers
         }
 
         // GET: Credits/Details/5
+        [Authorize(Roles = "ADMIN USER")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,12 +39,14 @@ namespace BankOnline.Controllers
             return View(credit);
         }
 
+        [Authorize(Roles = "ADMIN")]
         public ActionResult All()
         {
             var credits = db.Credits.Include(e => e.BankAccount);
             return View(credits);
         }
 
+        [Authorize(Roles = "ADMIN")]
         public ActionResult Status(int? id, string status)
         {
             if (id == null)
@@ -70,6 +74,7 @@ namespace BankOnline.Controllers
         }
 
         // GET: Credits/Create
+        [Authorize(Roles = "USER")]
         public ActionResult Create()
         {
             ViewBag.BankAccountID = new SelectList(db.BankAccounts, "ID", "Number");
@@ -81,6 +86,7 @@ namespace BankOnline.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "USER")]
         public ActionResult Create([Bind(Include = "ID,ProfileID,Balance,BalancePaid,InstallmentNums,StatusDate,CreditType")] Credit credit)
         {
             if (ModelState.IsValid)
@@ -95,6 +101,7 @@ namespace BankOnline.Controllers
         }
 
         // GET: Credits/Edit/5
+        [Authorize(Roles ="ADMIN")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -115,6 +122,7 @@ namespace BankOnline.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ADMIN")]
         public ActionResult Edit([Bind(Include = "ID,ProfileID,Balance,BalancePaid,InstallmentNums,StatusDate,CreditType")] Credit credit)
         {
             if (ModelState.IsValid)
@@ -127,6 +135,7 @@ namespace BankOnline.Controllers
             return View(credit);
         }
 
+        [Authorize(Roles = "USER")]
         public ActionResult UserCredits()
         {
             Profile profile = db.Profiles.Single(p => p.UserName == User.Identity.Name);
@@ -136,6 +145,7 @@ namespace BankOnline.Controllers
         }
 
         // GET: Credits/Delete/5
+        [Authorize(Roles = "ADMIN")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -153,6 +163,7 @@ namespace BankOnline.Controllers
         // POST: Credits/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ADMIN")]
         public ActionResult DeleteConfirmed(int id)
         {
             Credit credit = db.Credits.Find(id);

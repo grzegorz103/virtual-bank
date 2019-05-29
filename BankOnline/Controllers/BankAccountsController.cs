@@ -18,6 +18,7 @@ namespace BankOnline.Controllers
         private BankContext db = new BankContext();
 
         // GET: BankAccounts
+        [Authorize(Roles = "ADMIN")]
         public ViewResult Index(string sortOrder,  string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
@@ -62,6 +63,7 @@ namespace BankOnline.Controllers
             return View(bankAccounts.ToPagedList(pageNumber, pageSize));
         }
 
+        [Authorize(Roles = "USER")]
         public ActionResult My()
         {
             var bankAccounts = db.BankAccounts
@@ -72,6 +74,7 @@ namespace BankOnline.Controllers
         }
 
         // GET: BankAccounts/Details/5
+        [Authorize(Roles = "ADMIN USER")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -87,6 +90,7 @@ namespace BankOnline.Controllers
         }
 
         // GET: BankAccounts/Create
+        [Authorize(Roles = "USER")]
         public ActionResult Create()
         {
             ViewBag.ProfileID = new SelectList(db.Profiles, "ID", "UserName");
@@ -98,6 +102,7 @@ namespace BankOnline.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "USER")]
         public ActionResult Create([Bind(Include = "ID,Number,Balance,ProfileID")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
@@ -112,6 +117,7 @@ namespace BankOnline.Controllers
         }
 
         // GET: BankAccounts/Edit/5
+        [Authorize(Roles = "ADMIN")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -145,6 +151,7 @@ namespace BankOnline.Controllers
         }
 
         // GET: BankAccounts/Delete/5
+        [Authorize(Roles = "ADMIN")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -162,6 +169,7 @@ namespace BankOnline.Controllers
         // POST: BankAccounts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "ADMIN")]
         public ActionResult DeleteConfirmed(int id)
         {
             BankAccount bankAccount = db.BankAccounts.Find(id);
