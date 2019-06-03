@@ -285,7 +285,7 @@
     <Content Include="Views\Credits\Details.cshtml" />
     <Content Include="Views\Credits\Edit.cshtml" />
     <Content Include="Views\Credits\Index.cshtml" />
-    <Content Include="Views\Credits\All.cshtml" />
+    <Content Include="Views\Credits\My.cshtml" />
     <Content Include="Views\Investments\My.cshtml" />
     <Content Include="Views\CreditCards\Create.cshtml" />
     <Content Include="Views\CreditCards\Delete.cshtml" />

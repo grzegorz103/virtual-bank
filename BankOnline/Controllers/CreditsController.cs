@@ -39,10 +39,10 @@ namespace BankOnline.Controllers
             return View(credit);
         }
 
-        [Authorize(Roles = "ADMIN")]
-        public ActionResult All()
+        [Authorize(Roles = "USER")]
+        public ActionResult My()
         {
-            var credits = db.Credits.Include(e => e.BankAccount);
+            var credits = db.Credits.Include(e => e.BankAccount).Where(e => e.BankAccount.Profile.UserName == User.Identity.Name);
             return View(credits);
         }
 

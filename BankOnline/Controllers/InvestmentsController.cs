@@ -32,7 +32,7 @@ namespace BankOnline.Controllers
             return View(investments.ToList());
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "USER")]
         public ActionResult My()
         {
             IQueryable<Investment> investments = db.Investments
@@ -91,7 +91,7 @@ namespace BankOnline.Controllers
                     db.Investments.Add(investment);
                 }
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("My");
             }
 
             ViewBag.BankAccountID = new SelectList(db.BankAccounts, "ID", "Number", investment.BankAccountID);

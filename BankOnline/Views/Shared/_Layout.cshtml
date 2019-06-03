@@ -30,6 +30,13 @@
                         <li>@Html.ActionLink("Bank accounts", "Index", "BankAccounts")</li>
                         <li>@Html.ActionLink("Credit cards", "Index", "CreditCards")</li>
                     }
+                    @if (Context.User.Identity.IsAuthenticated && !Context.User.IsInRole("ADMIN"))
+                    {
+                        <li>@Html.ActionLink("Transactions", "My", "Transactions")</li>
+                        <li>@Html.ActionLink("My bank accounts", "My", "BankAccounts")</li>
+                        <li>@Html.ActionLink("Investments", "My", "Investments")</li>
+                        <li>@Html.ActionLink("Credits", "My", "Credits")</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
