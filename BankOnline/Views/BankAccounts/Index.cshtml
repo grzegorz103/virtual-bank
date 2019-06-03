@@ -1,6 +1,4 @@
-﻿@model PagedList.IPagedList<BankOnline.Models.BankAccount>
-@using PagedList.Mvc;
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+﻿@model IEnumerable<BankOnline.Models.BankAccount>
 
 @{
     ViewBag.Title = "Index";
@@ -11,51 +9,49 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-@using (Html.BeginForm("Index", "BankAccount", FormMethod.Get))
-{
-    <p>
-        Find by email or account number: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
-    </p>
-}
 <table class="table">
     <tr>
-
-        <th>Email</th>
         <th>
-            @Html.ActionLink("Number", "Index", new { sortOrder = ViewBag.NumberSortParam, currentFilter = ViewBag.CurrentFilter })
+            @Html.DisplayNameFor(model => model.CreditCard.Image)
         </th>
         <th>
-            @Html.ActionLink("Balance", "Index", new { sortOrder = ViewBag.BalanceSortParam, currentFilter = ViewBag.CurrentFilter })
+            @Html.DisplayNameFor(model => model.Profile.UserName)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Number)
         </th>
-
+        <th>
+            @Html.DisplayNameFor(model => model.MyProperty)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Balance)
+        </th>
+        <th></th>
     </tr>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Profile.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Number)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Balance)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-            </td>
-        </tr>
-    }
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreditCard.Image)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Profile.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Number)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MyProperty)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Balance)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
 
 </table>
-<br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
-@Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

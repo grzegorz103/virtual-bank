@@ -10,7 +10,6 @@ using BankOnline;
 using BankOnline.Models;
 using PagedList;
 
-
 namespace BankOnline.Controllers
 {
     public class BankAccountsController : Controller
@@ -19,7 +18,7 @@ namespace BankOnline.Controllers
 
         // GET: BankAccounts
         [Authorize(Roles = "ADMIN")]
-        public ViewResult Index(string sortOrder,  string currentFilter, string searchString, int? page)
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NumberSortParm = String.IsNullOrEmpty(sortOrder) ? "number_desc" : "";
@@ -63,18 +62,19 @@ namespace BankOnline.Controllers
             return View(bankAccounts.ToPagedList(pageNumber, pageSize));
         }
 
+
         [Authorize(Roles = "USER")]
         public ActionResult My()
         {
             var bankAccounts = db.BankAccounts
                 .Include(e => e.Profile)
+                .Include(e => e.CreditCard)
                 .Where(e => e.Profile.UserName == User.Identity.Name);
 
-                return View(bankAccounts.ToList());
+            return View(bankAccounts.ToList());
         }
 
         // GET: BankAccounts/Details/5
-        [Authorize(Roles = "ADMIN USER")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -90,9 +90,9 @@ namespace BankOnline.Controllers
         }
 
         // GET: BankAccounts/Create
-        [Authorize(Roles = "USER")]
         public ActionResult Create()
         {
+            ViewBag.CreditCardID = new SelectList(db.CreditCards, "ID", "Image");
             ViewBag.ProfileID = new SelectList(db.Profiles, "ID", "UserName");
             return View();
         }
@@ -102,8 +102,7 @@ namespace BankOnline.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "USER")]
-        public ActionResult Create([Bind(Include = "ID,Number,Balance,ProfileID")] BankAccount bankAccount)
+        public ActionResult Create([Bind(Include = "ID,Number,MyProperty,Balance,ProfileID,CreditCardID")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
@@ -112,12 +111,12 @@ namespace BankOnline.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.CreditCardID = new SelectList(db.CreditCards, "ID", "Image", bankAccount.CreditCardID);
             ViewBag.ProfileID = new SelectList(db.Profiles, "ID", "UserName", bankAccount.ProfileID);
             return View(bankAccount);
         }
 
         // GET: BankAccounts/Edit/5
-        [Authorize(Roles = "ADMIN")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -129,6 +128,7 @@ namespace BankOnline.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.CreditCardID = new SelectList(db.CreditCards, "ID", "Image", bankAccount.CreditCardID);
             ViewBag.ProfileID = new SelectList(db.Profiles, "ID", "UserName", bankAccount.ProfileID);
             return View(bankAccount);
         }
@@ -138,7 +138,7 @@ namespace BankOnline.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Number,Balance,ProfileID")] BankAccount bankAccount)
+        public ActionResult Edit([Bind(Include = "ID,Number,MyProperty,Balance,ProfileID,CreditCardID")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
@@ -146,12 +146,12 @@ namespace BankOnline.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.CreditCardID = new SelectList(db.CreditCards, "ID", "Image", bankAccount.CreditCardID);
             ViewBag.ProfileID = new SelectList(db.Profiles, "ID", "UserName", bankAccount.ProfileID);
             return View(bankAccount);
         }
 
         // GET: BankAccounts/Delete/5
-        [Authorize(Roles = "ADMIN")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -169,7 +169,6 @@ namespace BankOnline.Controllers
         // POST: BankAccounts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "ADMIN")]
         public ActionResult DeleteConfirmed(int id)
         {
             BankAccount bankAccount = db.BankAccounts.Find(id);

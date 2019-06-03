@@ -17,6 +17,7 @@ namespace BankOnline
         public DbSet<InvestmentType> InvestmentTypes { get; set; }
         public DbSet<Investment> Investments { get; set; }
         public DbSet<Credit> Credits { get; set; }
+        public DbSet<CreditCard> CreditCards { get; set; }
 
         public BankContext() : base("DefaultConnection")
         {
@@ -45,6 +46,6 @@ namespace BankOnline
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
-
+        
     }
 }

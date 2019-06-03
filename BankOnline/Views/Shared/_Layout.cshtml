@@ -27,7 +27,8 @@
                     <li>@Html.ActionLink("Kontakt", "Contact", "Home")</li>
                     @if (Context.User.IsInRole("ADMIN"))
                     {
-                      <li>@Html.ActionLink("Bank accounts", "Index", "BankAccounts")</li>
+                        <li>@Html.ActionLink("Bank accounts", "Index", "BankAccounts")</li>
+                        <li>@Html.ActionLink("Credit cards", "Index", "CreditCards")</li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")

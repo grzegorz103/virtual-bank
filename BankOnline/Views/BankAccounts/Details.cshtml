@@ -11,6 +11,14 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
+            @Html.DisplayNameFor(model => model.CreditCard.Image)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreditCard.Image)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Profile.UserName)
         </dt>
 
@@ -26,6 +34,8 @@
             @Html.DisplayFor(model => model.Number)
         </dd>
 
+      
+
         <dt>
             @Html.DisplayNameFor(model => model.Balance)
         </dt>
@@ -34,6 +44,13 @@
             @Html.DisplayFor(model => model.Balance)
         </dd>
 
+
+        <dt>
+            Credit card
+        </dt>
+        <dd>
+            <img src="~/Images/@Model.CreditCard.Image" width="325px" height="204px" />
+        </dd>
     </dl>
 </div>
 <p>

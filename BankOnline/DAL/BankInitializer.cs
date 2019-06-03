@@ -9,7 +9,7 @@ using System.Web;
 
 namespace BankOnline.DAL
 {
-    public class BankInitializer : DropCreateDatabaseIfModelChanges<BankContext>
+    public class BankInitializer : DropCreateDatabaseAlways<BankContext>
     {
         protected override void Seed(BankContext context)
         {
@@ -41,11 +41,22 @@ namespace BankOnline.DAL
             profiles.ForEach(e => context.Profiles.Add(e));
             context.SaveChanges();
 
+            var creditCards = new List<CreditCard>
+            {
+                new CreditCard{Image = "1.jpg"},
+                new CreditCard{Image = "2.jpg"},
+                new CreditCard{Image = "3.jpg"},
+                new CreditCard{Image = "4.png"},
+            };
+
+            creditCards.ForEach(e => context.CreditCards.Add(e));
+            context.SaveChanges();
+
             var bankAccounts = new List<BankAccount>
             {
-                new BankAccount{Number = "2249000054516684537431475", Balance = 100.00f, ProfileID = 1},
-                new BankAccount{Number = "64249000057186527449208640", Balance =  100.00f, ProfileID = 2},
-                new BankAccount{Number = "63249000053283862487685011", Balance = 100.00f, ProfileID = 3},
+                new BankAccount{Number = "2249000054516684537431475", Balance = 100.00f, ProfileID = 1, CreditCardID = 1},
+                new BankAccount{Number = "64249000057186527449208640", Balance =  100.00f, ProfileID = 2, CreditCardID = 2},
+                new BankAccount{Number = "63249000053283862487685011", Balance = 100.00f, ProfileID = 3, CreditCardID = 3},
             };
             bankAccounts.ForEach(e => context.BankAccounts.Add(e));
             context.SaveChanges();

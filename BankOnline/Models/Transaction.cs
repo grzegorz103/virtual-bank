@@ -19,5 +19,6 @@ namespace BankOnline.Models
         public float Amount { get; set; }
         public virtual BankAccount From { get; set; }
         public virtual BankAccount To { get; set; }
+
     }
 }

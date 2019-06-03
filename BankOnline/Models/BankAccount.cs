@@ -12,12 +12,12 @@ namespace BankOnline.Models
 
         [StringLength(26)]
         public string Number { get; set; }
-
         [DataType(DataType.Currency)]
         public float Balance { get; set; }
         public int ProfileID { get; set; }
+        public int CreditCardID { get; set; }
+        public virtual CreditCard CreditCard { get; set; }
         public virtual Profile Profile { get; set; }
-
         public virtual ICollection<Transaction> TransactionFrom { get; set; }
         public virtual ICollection<Transaction> TransactionTo { get; set; }
         public virtual ICollection<Credit> Credits { get; set; }
