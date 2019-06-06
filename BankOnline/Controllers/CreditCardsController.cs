@@ -95,7 +95,14 @@ namespace BankOnline.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(creditCard).State = EntityState.Modified;
+                HttpPostedFileBase file = Request.Files["imageFile"];
+                if (file != null && file.ContentLength > 0)
+                {
+                    creditCard.Image = Path.GetFileName(file.FileName);
+                    file.SaveAs(HttpContext.Server.MapPath("~/Images/") + creditCard.Image);
+                }
+
+                                db.Entry(creditCard).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
