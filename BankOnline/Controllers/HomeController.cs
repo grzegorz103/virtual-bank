@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Linq;
+using System.Data.Entity;
 using System.Web.Mvc;
 
 namespace BankOnline.Controllers
@@ -23,6 +25,19 @@ namespace BankOnline.Controllers
 
         public ActionResult About()
         {
+            IQueryable<Investment> investments = db.Investments
+             .Include(i => i.BankAccount)
+             .Include(i => i.InvestmentType);
+            investments.ToList().ForEach(e =>
+            {
+                DateTime date = DateTime.Now;
+                TimeSpan span = date - e.VisitDate;
+                float timeElapsed = Convert.ToSingle(span.TotalSeconds);
+                e.Balance = (float)Math.Round(e.Balance + ((((e.InvestmentType.Percentage * e.Balance) / 100) * (timeElapsed) / 10)), 2);
+                e.VisitDate = date;
+            });
+            db.SaveChanges();
+
             IQueryable<InvestmentGroup> data = from investment in db.Investments
                                                group investment by investment.InvestmentType into invGroup
                                                select new InvestmentGroup()

@@ -293,6 +293,7 @@
     <Content Include="Views\CreditCards\Edit.cshtml" />
     <Content Include="Views\CreditCards\Index.cshtml" />
     <Content Include="Views\BankAccounts\Create.cshtml" />
+    <Content Include="Views\BankAccounts\MyList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

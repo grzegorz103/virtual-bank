@@ -9,18 +9,18 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 @using (Html.BeginForm())
+@using (Html.BeginForm("Index", "BankAccount", FormMethod.Get))
 {
     <p>
         Find by email or account number: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
         <input type="submit" value="Search" />
     </p>
 }
-
 <table class="table">
     <tr>
 
         <th>
-            Username
+            @Html.DisplayNameFor(model => model.Profile.UserName)
         </th>
 
         <th>
@@ -56,4 +56,6 @@
 <br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+@Html.PagedListPager(Model, page => Url.Action("MyList", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+@Html.PagedListPager(Model, page => Url.Action("MyList",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter })) 

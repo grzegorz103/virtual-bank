@@ -35,6 +35,7 @@ namespace BankOnline.Controllers
             ViewBag.CurrentFilter = searchString;
 
             var bankAccounts = from s in db.BankAccounts select s;
+            bankAccounts = bankAccounts.Include(e => e.Profile);
             if (!String.IsNullOrEmpty(searchString))
             {
                 bankAccounts = bankAccounts.Where(s => s.Number.Contains(searchString)
@@ -64,14 +65,49 @@ namespace BankOnline.Controllers
 
 
         [Authorize(Roles = "USER")]
-        public ActionResult My()
+        public ActionResult MyList(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            var bankAccounts = db.BankAccounts
-                .Include(e => e.Profile)
-                .Include(e => e.CreditCard)
-                .Where(e => e.Profile.UserName == User.Identity.Name);
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NumberSortParm = String.IsNullOrEmpty(sortOrder) ? "number_desc" : "";
+            ViewBag.BalanceSortParam = sortOrder == "balance" ? "balance_desc" : "balance";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
 
-            return View(bankAccounts.ToList());
+            ViewBag.CurrentFilter = searchString;
+
+            var bankAccounts = from s in db.BankAccounts select s;
+            bankAccounts = bankAccounts.Include(e => e.Profile);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                bankAccounts = bankAccounts.Where(s => s.Number.Contains(searchString)
+                                       || s.Profile.UserName.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "number_desc":
+                    bankAccounts = bankAccounts.OrderByDescending(s => s.Number);
+                    break;
+                case "balance":
+                    bankAccounts = bankAccounts.OrderBy(s => s.Balance);
+                    break;
+                case "balance_desc":
+                    bankAccounts = bankAccounts.OrderByDescending(s => s.Balance);
+                    break;
+                default:
+                    bankAccounts = bankAccounts.OrderBy(s => s.Number);
+                    break;
+            }
+
+
+            int pageSize = 2;
+            int pageNumber = (page ?? 1);
+            return View(bankAccounts.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: BankAccounts/Details/5

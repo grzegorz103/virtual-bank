@@ -33,7 +33,7 @@
                     @if (Context.User.Identity.IsAuthenticated && !Context.User.IsInRole("ADMIN"))
                     {
                         <li>@Html.ActionLink("Transactions", "My", "Transactions")</li>
-                        <li>@Html.ActionLink("My bank accounts", "My", "BankAccounts")</li>
+                        <li>@Html.ActionLink("My bank accounts", "MyList", "BankAccounts")</li>
                         <li>@Html.ActionLink("Investments", "My", "Investments")</li>
                         <li>@Html.ActionLink("Credits", "My", "Credits")</li>
                     }
