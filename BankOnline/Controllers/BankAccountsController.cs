@@ -64,7 +64,7 @@ namespace BankOnline.Controllers
         }
 
 
-        [Authorize(Roles = "USER")]
+        [Authorize]
         public ActionResult MyList(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
@@ -88,6 +88,7 @@ namespace BankOnline.Controllers
                 bankAccounts = bankAccounts.Where(s => s.Number.Contains(searchString)
                                        || s.Profile.UserName.Contains(searchString));
             }
+            bankAccounts = bankAccounts.Where(e => e.Profile.UserName == User.Identity.Name);
             switch (sortOrder)
             {
                 case "number_desc":
@@ -142,15 +143,17 @@ namespace BankOnline.Controllers
         {
             if (ModelState.IsValid)
             {
+                bankAccount.Profile = db.Profiles.Single(e => e.UserName == User.Identity.Name);
                 db.BankAccounts.Add(bankAccount);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("MyList");
             }
 
             ViewBag.CreditCardID = new SelectList(db.CreditCards, "ID", "Image", bankAccount.CreditCardID);
             ViewBag.ProfileID = new SelectList(db.Profiles, "ID", "UserName", bankAccount.ProfileID);
             return View(bankAccount);
         }
+
 
         // GET: BankAccounts/Edit/5
         public ActionResult Edit(int? id)

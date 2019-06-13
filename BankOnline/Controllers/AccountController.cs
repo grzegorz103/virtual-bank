@@ -162,7 +162,7 @@ namespace BankOnline.Controllers
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Potwierdź konto", "Potwierdź konto, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
-                    Profile profile = new Profile { UserName = model.Email };
+                    Profile profile = new Profile { UserName = model.Email, Address = new Address() };
                     BankContext db = new BankContext();
                     db.Profiles.Add(profile);
                     db.SaveChanges();

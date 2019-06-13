@@ -16,10 +16,15 @@ namespace BankOnline.Controllers
         private BankContext db = new BankContext();
 
         // GET: Investments
-        [Authorize(Roles = "ADMIN")]
+        [Authorize]
         public ActionResult Index()
         {
-            IQueryable<Investment> investments = db.Investments.Include(i => i.BankAccount).Include(i => i.InvestmentType);
+            IQueryable<Investment> investments;
+            if (User.IsInRole("ADMIN"))
+                investments = db.Investments.Include(i => i.BankAccount).Include(i => i.InvestmentType);
+            else
+                investments = db.Investments.Include(i => i.BankAccount).Include(i => i.InvestmentType).Where(e => e.BankAccount.Profile.UserName == User.Identity.Name);
+
             investments.ToList().ForEach(e =>
             {
                 DateTime date = DateTime.Now;
@@ -32,26 +37,9 @@ namespace BankOnline.Controllers
             return View(investments.ToList());
         }
 
-        [Authorize(Roles = "USER")]
-        public ActionResult My()
-        {
-            IQueryable<Investment> investments = db.Investments
-                .Include(i => i.BankAccount)
-                .Include(i => i.InvestmentType)
-                .Where(e => e.BankAccount.Profile.UserName == User.Identity.Name);
-            investments.ToList().ForEach(e =>
-            {
-                DateTime date = DateTime.Now;
-                TimeSpan span = date - e.VisitDate;
-                float timeElapsed = Convert.ToSingle(span.TotalSeconds);
-                e.Balance = (float)Math.Round(e.Balance + ((((e.InvestmentType.Percentage * e.Balance) / 100) * (timeElapsed) / 10)), 2);
-                e.VisitDate = date;
-            });
-            db.SaveChanges();
-            return View(investments.ToList());
-        }
 
         // GET: Investments/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -67,9 +55,10 @@ namespace BankOnline.Controllers
         }
 
         // GET: Investments/Create
+        [Authorize]
         public ActionResult Create()
         {
-            ViewBag.BankAccountID = new SelectList(db.BankAccounts, "ID", "Number");
+            ViewBag.BankAccountID = new SelectList(db.BankAccounts.Where(e => e.Profile.UserName == User.Identity.Name).ToList(), "ID", "Number");
             ViewBag.InvestmentTypeID = new SelectList(db.InvestmentTypes, "ID", "Name");
             return View();
         }
@@ -91,7 +80,7 @@ namespace BankOnline.Controllers
                     db.Investments.Add(investment);
                 }
                 db.SaveChanges();
-                return RedirectToAction("My");
+                return RedirectToAction("Index");
             }
 
             ViewBag.BankAccountID = new SelectList(db.BankAccounts, "ID", "Number", investment.BankAccountID);

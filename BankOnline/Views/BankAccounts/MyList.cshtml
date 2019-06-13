@@ -2,14 +2,13 @@
 @using PagedList.Mvc;
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "My bank accounts";
 }
 <h2>Index</h2>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-@using (Html.BeginForm())
-@using (Html.BeginForm("Index", "BankAccount", FormMethod.Get))
+@using (Html.BeginForm("MyList", "BankAccounts", FormMethod.Get))
 {
     <p>
         Find by email or account number: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
@@ -20,7 +19,7 @@
     <tr>
 
         <th>
-            @Html.DisplayNameFor(model => model.Profile.UserName)
+            Username
         </th>
 
         <th>
@@ -45,7 +44,6 @@
                 @Html.DisplayFor(modelItem => item.Balance)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
                 @Html.ActionLink("Details", "Details", new { id = item.ID }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.ID })
             </td>
@@ -57,5 +55,3 @@
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
 @Html.PagedListPager(Model, page => Url.Action("MyList", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
-@Html.PagedListPager(Model, page => Url.Action("MyList",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter })) 

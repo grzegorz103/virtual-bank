@@ -8,13 +8,7 @@ namespace BankOnline.Models
 {
     public class Address
     {
-        public long ID { get; set; }
-
-        [StringLength(50)]
-        public string Name { get; set; }
-
-        [StringLength(50)]
-        public string Surname { get; set; }
+        public int ID { get; set; }
 
         [StringLength(50)]
         public string City { get; set; }

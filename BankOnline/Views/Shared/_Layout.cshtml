@@ -29,12 +29,14 @@
                     {
                         <li>@Html.ActionLink("Bank accounts", "Index", "BankAccounts")</li>
                         <li>@Html.ActionLink("Credit cards", "Index", "CreditCards")</li>
+                        <li>@Html.ActionLink("Transactions", "Index", "Transactions")</li>
+                        <li>@Html.ActionLink("Investments", "Index", "Investments")</li>
                     }
                     @if (Context.User.Identity.IsAuthenticated && !Context.User.IsInRole("ADMIN"))
                     {
-                        <li>@Html.ActionLink("Transactions", "My", "Transactions")</li>
+                        <li>@Html.ActionLink("Transactions", "Index", "Transactions")</li>
                         <li>@Html.ActionLink("My bank accounts", "MyList", "BankAccounts")</li>
-                        <li>@Html.ActionLink("Investments", "My", "Investments")</li>
+                        <li>@Html.ActionLink("Investments", "Index", "Investments")</li>
                         <li>@Html.ActionLink("Credits", "My", "Credits")</li>
                     }
                 </ul>

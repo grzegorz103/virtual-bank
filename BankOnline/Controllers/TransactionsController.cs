@@ -17,13 +17,22 @@ namespace BankOnline.Controllers
         private BankContext db = new BankContext();
 
         // GET: Transactions
+        [Authorize]
         public ActionResult Index()
         {
-            var transactions = db.Transactions.Include(t => t.From).Include(t => t.To);
-            return View(transactions.ToList());
+            IQueryable transactions;
+            if (User.IsInRole("ADMIN"))
+                transactions = db.Transactions.Include(t => t.From).Include(t => t.To);
+            else
+                transactions = db.Transactions.Include(t => t.From).Include(t => t.To)
+            .Where(e => e.To.Profile.UserName == User.Identity.Name || e.From.Profile.UserName == User.Identity.Name);
+
+            return View(transactions);
         }
 
+
         // GET: Transactions/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -39,6 +48,7 @@ namespace BankOnline.Controllers
         }
 
         // GET: Transactions/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.FromID = new SelectList(db.BankAccounts, "ID", "Number");
@@ -63,7 +73,7 @@ namespace BankOnline.Controllers
                 fr.Balance -= transaction.Amount;
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
-                SendMail(target.Profile.UserName, "You received transfer", "You have new transaction. Visit us to check. Virtual bank");
+               // SendMail(target.Profile.UserName, "You received transfer", "You have new transaction. Visit us to check. Virtual bank");
                 return RedirectToAction("Index");
             }
 

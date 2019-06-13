@@ -29,8 +29,6 @@ namespace BankOnline.DAL
             addresses.ForEach(e => context.Addresses.Add(e));
             context.SaveChanges();
 
-
-
             var profiles = new List<Profile>
             {
                 new Profile{Name = "Jan", Surname = "Kowalski", UserName="jan@kowalski.pl", AddressID=1},
