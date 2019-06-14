@@ -51,7 +51,7 @@ namespace BankOnline.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            ViewBag.FromID = new SelectList(db.BankAccounts, "ID", "Number");
+            ViewBag.FromID = new SelectList(db.BankAccounts.Where(e => e.Profile.UserName == User.Identity.Name), "ID", "Number");
             ViewBag.ToID = new SelectList(db.BankAccounts, "ID", "Number");
             return View();
         }
@@ -65,6 +65,7 @@ namespace BankOnline.Controllers
         {
             if (ModelState.IsValid)
             {
+                transaction.TransactionDate = DateTime.Now;
                 BankAccount fr = db.BankAccounts.Single(e => e.ID == transaction.FromID);
                 BankAccount target = db.BankAccounts.Single(e => e.ID == transaction.ToID);
                 if (fr.Balance < transaction.Amount)

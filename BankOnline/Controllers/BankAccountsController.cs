@@ -119,6 +119,8 @@ namespace BankOnline.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             BankAccount bankAccount = db.BankAccounts.Find(id);
+            ViewBag.OutTransfers = db.Transactions.Include(i => i.From).Where(e => e.From.Number == bankAccount.Number).ToList();
+            ViewBag.InTransfers = db.Transactions.Include(i => i.To).Where(e => e.To.Number == bankAccount.Number).ToList();
             if (bankAccount == null)
             {
                 return HttpNotFound();
@@ -129,6 +131,7 @@ namespace BankOnline.Controllers
         // GET: BankAccounts/Create
         public ActionResult Create()
         {
+            ViewBag.CreditCards = db.CreditCards.ToList();
             ViewBag.CreditCardID = new SelectList(db.CreditCards, "ID", "Image");
             ViewBag.ProfileID = new SelectList(db.Profiles, "ID", "UserName");
             return View();

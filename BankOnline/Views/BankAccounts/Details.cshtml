@@ -19,7 +19,7 @@
         </dd>
 
         <dt>
-      User name
+            User name
         </dt>
 
         <dd>
@@ -34,7 +34,7 @@
             @Html.DisplayFor(model => model.Number)
         </dd>
 
-      
+
 
         <dt>
             @Html.DisplayNameFor(model => model.Balance)
@@ -53,5 +53,38 @@
         </dd>
     </dl>
 </div>
-<p>
-</p>
+<hr />
+<h2>Outgoing transfers</h2>
+<table class="table">
+    <tr>
+        <th>Destinated bank account</th>
+        <th>Balance</th>
+        <th>Date</th>
+    </tr>
+    @foreach (var outTr in ViewBag.OutTransfers)
+    {
+        <tr>
+            <th>@outTr.To.Number</th>
+            <th>@outTr.Amount zł</th>
+            <th>@outTr.TransactionDate</th>
+        </tr>
+    }
+</table>
+
+<hr />
+<h2>Incoming transfers</h2>
+<table class="table">
+    <tr>
+        <th>Source bank account</th>
+        <th>Balance</th>
+        <th>Date</th>
+    </tr>
+    @foreach (var inTr in ViewBag.InTransfers)
+    {
+        <tr>
+            <th>@inTr.From.Number</th>
+            <th>@inTr.Amount zł </th>
+            <th>@inTr.TransactionDate</th>
+        </tr>
+    }
+</table>

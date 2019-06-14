@@ -7,10 +7,10 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>BankAccount</h4>
         <hr />
@@ -45,8 +45,20 @@
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
-        </div>    
+        </div>
     </div>
+    <div class="row">
+        @foreach (var image in ViewBag.CreditCards)
+        {
+
+        <div class="col-lg-4" style="margin-top: 5px">
+            <img src="~/Images/@image.Image" style="max-width: 100%" />
+            @image.Image
+        </div>
+        }
+    </div>
+    
+
 }
 
 <div>

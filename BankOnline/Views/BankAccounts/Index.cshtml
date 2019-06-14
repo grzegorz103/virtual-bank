@@ -4,8 +4,14 @@
 @{
     ViewBag.Title = "Index";
 }
-<h2>Index</h2>
-<p>
+
+@if (Context.User.IsInRole("ADMIN"))
+{
+    <h2>List of bank accounts</h2>
+} else {
+    <h2>Your bank accounts</h2>
+}
+ <p>
     @Html.ActionLink("Create New", "Create")
 </p>
 @using (Html.BeginForm())
