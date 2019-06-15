@@ -20,43 +20,43 @@
         <th>
             @Html.DisplayNameFor(model => model.BalancePaid)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.InstallmentNums)
-        </th>
+
         <th>
             @Html.DisplayNameFor(model => model.StatusDate)
         </th>
+
         <th>
             @Html.DisplayNameFor(model => model.CreditType)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.BankAccount.Number)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Balance)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BalancePaid)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.InstallmentNums)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StatusDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreditType)
-        </td>
-        <td>
-            @Html.ActionLink("Accept", "Status", new { id = item.ID, status = "acc" })
-            @Html.ActionLink("Reject", "Status", new { id = item.ID, status = "rej" })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BankAccount.Number)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Balance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BalancePaid)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreditType)
+            </td>
+            @if (item.CreditType == BankOnline.Models.CreditType.ACCEPTED)
+            {
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.ID })
+            </td>
+            }
+        </tr>
+    }
 
 </table>

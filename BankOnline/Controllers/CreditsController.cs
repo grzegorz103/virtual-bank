@@ -24,7 +24,7 @@ namespace BankOnline.Controllers
         }
 
         // GET: Credits/Details/5
-        [Authorize(Roles = "ADMIN USER")]
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -39,14 +39,14 @@ namespace BankOnline.Controllers
             return View(credit);
         }
 
-        [Authorize(Roles = "USER")]
+        [Authorize]
         public ActionResult My()
         {
             var credits = db.Credits.Include(e => e.BankAccount).Where(e => e.BankAccount.Profile.UserName == User.Identity.Name);
             return View(credits);
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize]
         public ActionResult Status(int? id, string status)
         {
             if (id == null)
@@ -68,16 +68,44 @@ namespace BankOnline.Controllers
                         credit.CreditType = CreditType.REJECTED;
                     }
                 }
+                credit.StatusDate = DateTime.Now;
             }
             db.SaveChanges();
-            return RedirectToAction("All");
+            return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult Pay(int creditID, float payin)
+        {
+            if (payin > 0)
+            {
+                Credit credit = db.Credits.Single(e => e.ID == creditID);
+                if (credit != null)
+                {
+                    if (credit.BalancePaid + payin > credit.Balance)
+                    {
+                        payin = credit.Balance - credit.BalancePaid;
+                    }
+
+                    BankAccount bankAccount = credit.BankAccount;
+                    if(bankAccount.Balance >= payin)
+                    {
+                        bankAccount.Balance -= payin;
+                        credit.BalancePaid += payin;
+                    }
+                }
+                db.SaveChanges();
+            }
+            return RedirectToAction("My");
+
         }
 
         // GET: Credits/Create
-        [Authorize(Roles = "USER")]
+        [Authorize]
         public ActionResult Create()
         {
-            ViewBag.BankAccountID = new SelectList(db.BankAccounts, "ID", "Number");
+            ViewBag.BankAccountID = new SelectList(db.BankAccounts.Where(e => e.Profile.UserName == User.Identity.Name).ToList(), "ID", "Number");
             return View();
         }
 
@@ -86,14 +114,19 @@ namespace BankOnline.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "USER")]
-        public ActionResult Create([Bind(Include = "ID,ProfileID,Balance,BalancePaid,InstallmentNums,StatusDate,CreditType")] Credit credit)
+        [Authorize]
+        public ActionResult Create([Bind(Include = "ID,ProfileID,BankAccountID,Balance,BalancePaid,StatusDate,CreditType")] Credit credit)
         {
             if (ModelState.IsValid)
             {
+                credit.Balance += credit.Balance * 0.1f;
+                credit.BankAccount = db.BankAccounts.Find(credit.BankAccountID);
+                credit.CreditType = CreditType.AWAITING;
+                credit.BalancePaid = 0;
+                credit.StatusDate = DateTime.Now;
                 db.Credits.Add(credit);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("My");
             }
 
             ViewBag.ProfileID = new SelectList(db.Profiles, "ID", "UserName", credit.BankAccount);
@@ -101,7 +134,7 @@ namespace BankOnline.Controllers
         }
 
         // GET: Credits/Edit/5
-        [Authorize(Roles ="ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -113,6 +146,8 @@ namespace BankOnline.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.BankAccountID = new SelectList(db.BankAccounts.Where(e => e.Profile.UserName == User.Identity.Name).ToList(), "ID", "Number");
+
             ViewBag.ProfileID = new SelectList(db.Profiles, "ID", "UserName", credit.BankAccount);
             return View(credit);
         }
@@ -123,7 +158,7 @@ namespace BankOnline.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "ADMIN")]
-        public ActionResult Edit([Bind(Include = "ID,ProfileID,Balance,BalancePaid,InstallmentNums,StatusDate,CreditType")] Credit credit)
+        public ActionResult Edit([Bind(Include = "ID,ProfileID,Balance,BalancePaid,StatusDate,CreditType")] Credit credit)
         {
             if (ModelState.IsValid)
             {
@@ -135,7 +170,7 @@ namespace BankOnline.Controllers
             return View(credit);
         }
 
-        [Authorize(Roles = "USER")]
+        [Authorize]
         public ActionResult UserCredits()
         {
             Profile profile = db.Profiles.Single(p => p.UserName == User.Identity.Name);

@@ -16,6 +16,9 @@ namespace BankOnline.Models
 
         [DataType(DataType.Currency)]
         public float Balance { get; set; }
+
+        [DataType(DataType.Currency)]
+        public float BaseBalance { get; set; }
         public int InvestmentTypeID { get; set; }
 
         public virtual BankAccount BankAccount { get; set; }

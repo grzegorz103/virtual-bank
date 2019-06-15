@@ -85,9 +85,9 @@ namespace BankOnline.DAL
 
             var investments = new List<Investment>
             {
-                new Investment{BankAccountID = 1, InvestmentTypeID = 1, Balance = 100.00f, VisitDate = DateTime.Now},
-                new Investment{BankAccountID = 1, InvestmentTypeID = 1, Balance = 100.00f, VisitDate= DateTime.Now},
-                new Investment{BankAccountID = 2, InvestmentTypeID = 2, Balance = 50.00f, VisitDate = DateTime.Now}
+                new Investment{BankAccountID = 1, InvestmentTypeID = 1, Balance = 100.00f, BaseBalance=100.00f,VisitDate = DateTime.Now},
+                new Investment{BankAccountID = 1, InvestmentTypeID = 1, Balance = 100.00f,BaseBalance=100.00f, VisitDate= DateTime.Now},
+                new Investment{BankAccountID = 2, InvestmentTypeID = 2, Balance = 50.00f, BaseBalance=100.00f,VisitDate = DateTime.Now}
             };
 
             investments.ForEach(e => context.Investments.Add(e));
@@ -95,9 +95,9 @@ namespace BankOnline.DAL
 
             var credits = new List<Credit>
             {
-                new Credit{ Balance = 10000, BalancePaid = 2000, CreditType = CreditType.AWAITING, InstallmentNums = 2, BankAccountID = 1,
+                new Credit{ Balance = 10000, BalancePaid = 2000, CreditType = CreditType.ACCEPTED,  BankAccountID = 1,
                 StatusDate = DateTime.Now},
-                      new Credit{ Balance = 25000, BalancePaid = 3000, CreditType = CreditType.AWAITING, InstallmentNums = 3, BankAccountID = 1,
+                      new Credit{ Balance = 25000, BalancePaid = 3000, CreditType = CreditType.ACCEPTED,  BankAccountID = 1,
                 StatusDate = DateTime.Now},
             };
             credits.ForEach(e => context.Credits.Add(e));

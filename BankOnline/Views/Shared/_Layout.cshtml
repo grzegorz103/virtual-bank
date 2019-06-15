@@ -24,13 +24,13 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Strona główna", "Index", "Home")</li>
                     <li>@Html.ActionLink("Informacje", "About", "Home")</li>
-                    <li>@Html.ActionLink("Kontakt", "Contact", "Home")</li>
                     @if (Context.User.IsInRole("ADMIN"))
                     {
                         <li>@Html.ActionLink("Bank accounts", "Index", "BankAccounts")</li>
                         <li>@Html.ActionLink("Credit cards", "Index", "CreditCards")</li>
                         <li>@Html.ActionLink("Transactions", "Index", "Transactions")</li>
                         <li>@Html.ActionLink("Investments", "Index", "Investments")</li>
+                        <li>@Html.ActionLink("Credits", "Index", "Credits")</li>
                     }
                     @if (Context.User.Identity.IsAuthenticated && !Context.User.IsInRole("ADMIN"))
                     {

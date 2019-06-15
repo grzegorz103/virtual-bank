@@ -11,7 +11,6 @@ namespace BankOnline.Models
         public int BankAccountID { get; set; }  // wnioskodawca
         public float Balance { get; set; } // wysokosc kredytu
         public float BalancePaid { get; set; } // ilosc wplaconej gotowki
-        public int InstallmentNums { get; set; }
         public DateTime StatusDate { get; set; } // data rozpatrzenia wniosku
         public CreditType? CreditType { get; set; }
 

@@ -34,13 +34,6 @@
             @Html.DisplayFor(model => model.BalancePaid)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.InstallmentNums)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.InstallmentNums)
-        </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.StatusDate)
@@ -58,6 +51,15 @@
             @Html.DisplayFor(model => model.CreditType)
         </dd>
 
+        <hr />
+
+        <h2>Pay in for this credit</h2>
+        @using (Html.BeginForm("Pay", "Credits", FormMethod.Post))
+        {
+            @Html.Hidden("creditID", Model.ID);
+            <input type="number" name="payin" />
+            <input type="submit" value="Pay!" />
+        }
     </dl>
 </div>
 <p>

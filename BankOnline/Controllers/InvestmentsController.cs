@@ -30,7 +30,7 @@ namespace BankOnline.Controllers
                 DateTime date = DateTime.Now;
                 TimeSpan span = date - e.VisitDate;
                 float timeElapsed = Convert.ToSingle(span.TotalSeconds);
-                e.Balance = (float)Math.Round(e.Balance + ((((e.InvestmentType.Percentage * e.Balance) / 100) * (timeElapsed) / 10)), 2);
+                e.Balance = (float)Math.Round(e.Balance + ((((e.InvestmentType.Percentage * e.BaseBalance) / 100) * (timeElapsed) / 10)), 2);
                 e.VisitDate = date;
             });
             db.SaveChanges();

@@ -20,9 +20,7 @@
         <th>
             @Html.DisplayNameFor(model => model.BalancePaid)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.InstallmentNums)
-        </th>
+     
         <th>
             @Html.DisplayNameFor(model => model.StatusDate)
         </th>
@@ -43,9 +41,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.BalancePaid)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.InstallmentNums)
-        </td>
+
         <td>
             @Html.DisplayFor(modelItem => item.StatusDate)
         </td>
@@ -53,9 +49,10 @@
             @Html.DisplayFor(modelItem => item.CreditType)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            @Html.ActionLink("Accept", "Status", new { id = item.ID, status = "acc" })
+            @Html.ActionLink("Reject", "Status", new { id = item.ID, status = "rej" })
         </td>
     </tr>
 }
