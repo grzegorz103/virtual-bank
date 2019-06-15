@@ -47,7 +47,7 @@ namespace BankOnline.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,UserName,Name,Surname,AddressID")] Profile profile)
+        public ActionResult Create([Bind(Include = "ID,UserName,Name,Surname")] Profile profile)
         {
             if (ModelState.IsValid)
             {
@@ -59,6 +59,26 @@ namespace BankOnline.Controllers
             return View(profile);
         }
 
+        [Authorize]
+        public ActionResult My()
+        {
+            Profile profile = db.Profiles.Single(e => e.UserName == User.Identity.Name);
+            return View(profile);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult My([Bind(Include = "ID,UserName,Name,Surname")] Profile profile)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(profile).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("My");
+            }
+            return View(profile);
+        }
         // GET: Profiles/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -79,7 +99,7 @@ namespace BankOnline.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,UserName,Name,Surname,AddressID")] Profile profile)
+        public ActionResult Edit([Bind(Include = "ID,UserName,Name,Surname")] Profile profile)
         {
             if (ModelState.IsValid)
             {

@@ -75,6 +75,7 @@ namespace BankOnline.Controllers
                 BankAccount from = db.BankAccounts.Single(e => e.ID == investment.BankAccountID);
                 if (from.Balance >= investment.Balance)
                 {
+                    investment.BaseBalance = investment.Balance;
                     from.Balance -= investment.Balance;
                     investment.VisitDate = DateTime.Now;
                     db.Investments.Add(investment);

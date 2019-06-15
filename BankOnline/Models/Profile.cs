@@ -19,9 +19,6 @@ namespace BankOnline.Models
         [StringLength(50)]
         public string Surname { get; set; }
 
-        public int AddressID { get; set; }
-        public Address Address { get; set; }
-
         public virtual ICollection<BankAccount> BankAccounts { get; set; }
     }
 }

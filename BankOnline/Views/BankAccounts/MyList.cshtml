@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "My bank accounts";
 }
-<h2>Index</h2>
+<h2>My bank accounts</h2>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
@@ -44,8 +44,7 @@
                 @Html.DisplayFor(modelItem => item.Balance)
             </td>
             <td>
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                @Html.ActionLink("Details", "Details", new { id = item.ID })
             </td>
         </tr>
     }

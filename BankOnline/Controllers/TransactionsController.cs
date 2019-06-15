@@ -74,7 +74,7 @@ namespace BankOnline.Controllers
                 fr.Balance -= transaction.Amount;
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
-               // SendMail(target.Profile.UserName, "You received transfer", "You have new transaction. Visit us to check. Virtual bank");
+                SendMail(target.Profile.UserName, "You received transfer", "You have new transaction. Visit us to check. Virtual bank");
                 return RedirectToAction("Index");
             }
 
@@ -167,11 +167,9 @@ namespace BankOnline.Controllers
                 Credentials = new System.Net.NetworkCredential(
                     ConfigurationManager.AppSettings["sender"],
                     ConfigurationManager.AppSettings["passwd"]),
-                EnableSsl = true,
-                UseDefaultCredentials = true,
-                DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network
+                EnableSsl = true
             };
-
+            smtpClient.Port = 587; 
             smtpClient.Send(message);
         }
     }

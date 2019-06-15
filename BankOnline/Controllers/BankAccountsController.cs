@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using BankOnline;
@@ -147,6 +148,18 @@ namespace BankOnline.Controllers
             if (ModelState.IsValid)
             {
                 bankAccount.Profile = db.Profiles.Single(e => e.UserName == User.Identity.Name);
+                StringBuilder numb = new StringBuilder();
+                string generated;
+                Random rand = new Random();
+                do
+                {
+                    for (int i = 0; i < 26; ++i)
+                    {
+                        numb.Append(rand.Next(0, 9));
+                    }
+                    generated = numb.ToString();
+                } while (db.BankAccounts.Any(e => e.Number == generated));
+                bankAccount.Number = generated;
                 db.BankAccounts.Add(bankAccount);
                 db.SaveChanges();
                 return RedirectToAction("MyList");

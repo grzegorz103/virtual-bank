@@ -60,7 +60,7 @@ namespace BankOnline.Controllers
                 {
                     if (status == "acc")
                     {
-                        credit.BankAccount.Balance += credit.Balance;
+                        credit.BankAccount.Balance += credit.BaseBalance;
                         credit.CreditType = CreditType.ACCEPTED;
                     }
                     else if (status == "rej")
@@ -93,6 +93,10 @@ namespace BankOnline.Controllers
                     {
                         bankAccount.Balance -= payin;
                         credit.BalancePaid += payin;
+                        if(credit.BalancePaid == credit.Balance)
+                        {
+                            credit.CreditType = CreditType.PAID;
+                        }
                     }
                 }
                 db.SaveChanges();
@@ -119,9 +123,11 @@ namespace BankOnline.Controllers
         {
             if (ModelState.IsValid)
             {
+                credit.BaseBalance = credit.Balance;
                 credit.Balance += credit.Balance * 0.1f;
                 credit.BankAccount = db.BankAccounts.Find(credit.BankAccountID);
                 credit.CreditType = CreditType.AWAITING;
+                
                 credit.BalancePaid = 0;
                 credit.StatusDate = DateTime.Now;
                 db.Credits.Add(credit);

@@ -9,6 +9,7 @@ namespace BankOnline.Models
     {
         ACCEPTED,
         REJECTED,
-        AWAITING
+        AWAITING,
+        PAID
     }
 }

@@ -20,20 +20,13 @@ namespace BankOnline.DAL
             roleManager.Create(new IdentityRole("USER"));
 
             context.SaveChanges();
-            var addresses = new List<Address>
-            {
-                new Address{ City = "Warszawa", Street = "Warszawska", HouseNumber = 1, PostCode = "21-222"},
-                new Address{ City = "Siedlce", Street = "Siedlecka", HouseNumber = 51, PostCode = "12-152"},
-                new Address{ City = "Szczecin", Street = "Krakowska", HouseNumber = 21, PostCode = "53-523"},
-            };
-            addresses.ForEach(e => context.Addresses.Add(e));
-            context.SaveChanges();
+        
 
             var profiles = new List<Profile>
             {
-                new Profile{Name = "Jan", Surname = "Kowalski", UserName="jan@kowalski.pl", AddressID=1},
-                new Profile{Name = "Michal", Surname = "Michalski",   UserName="michal@michalski.pl", AddressID=2},
-                new Profile{Name = "Anna", Surname = "Annowska", UserName="anna@annowska.pl", AddressID=3 },
+                new Profile{ UserName="jan@kowalski.pl"},
+                new Profile{UserName="michal@michalski.pl"},
+                new Profile{UserName="anna@annowska.pl"},
             };
 
             profiles.ForEach(e => context.Profiles.Add(e));
@@ -69,7 +62,7 @@ namespace BankOnline.DAL
             userManager.Create(user3, "sdS@!sc3");
 
             userManager.AddToRole(user.Id, "ADMIN");
-            userManager.AddToRole(user2.Id, "ADMIN");
+            userManager.AddToRole(user2.Id, "USER");
             userManager.AddToRole(user3.Id, "USER");
 
             context.SaveChanges();

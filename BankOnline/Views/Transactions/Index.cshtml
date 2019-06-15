@@ -20,10 +20,15 @@
         <th>
             @Html.DisplayNameFor(model => model.TransactionDate)
         </th>
+
         <th>
             @Html.DisplayNameFor(model => model.Amount)
         </th>
-        <th></th>
+        @if (Context.User.IsInRole("ADMIN"))
+        {
+
+            <th></th>
+        }
     </tr>
 
 @foreach (var item in Model) {
@@ -40,11 +45,15 @@
         <td>
             @Html.DisplayFor(modelItem => item.Amount)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
+        @if (Context.User.IsInRole("ADMIN"))
+        {
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            </td>
+        }
     </tr>
 }
 
