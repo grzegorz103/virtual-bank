@@ -4,7 +4,7 @@
     ViewBag.Title = "All";
 }
 
-<h2>All</h2>
+<h2>My credits</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -48,13 +48,28 @@
                 @Html.DisplayFor(modelItem => item.StatusDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreditType)
+                @if (item.CreditType == BankOnline.Models.CreditType.ACCEPTED)
+                {
+                    @:Przyznano
+                }
+                else if (item.CreditType == BankOnline.Models.CreditType.AWAITING)
+                {
+                    @:Oczekuje
+                }
+                else if (item.CreditType == BankOnline.Models.CreditType.PAID)
+                {
+                    @:Spłacono
+                }
+                else
+                {
+                    @:Odrzucono
+                }
             </td>
             @if (item.CreditType == BankOnline.Models.CreditType.ACCEPTED)
             {
-            <td>
-                @Html.ActionLink("Details", "Details", new { id = item.ID })
-            </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = item.ID })
+                </td>
             }
         </tr>
     }
