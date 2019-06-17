@@ -24,9 +24,9 @@ namespace BankOnline.DAL
 
             var profiles = new List<Profile>
             {
-                new Profile{ UserName="jan@kowalski.pl"},
-                new Profile{UserName="michal@michalski.pl"},
-                new Profile{UserName="anna@annowska.pl"},
+                new Profile{ UserName="jan@kowalski.pl", EnableMail = false, Name="Jan", Surname="Kowalski"},
+                new Profile{UserName="michal@michalski.pl", EnableMail = false, Name="Jan", Surname="Kowalski"},
+                new Profile{UserName="anna@annowska.pl", EnableMail = false, Name="Jan", Surname="Kowalski"},
             };
 
             profiles.ForEach(e => context.Profiles.Add(e));

@@ -20,5 +20,7 @@ namespace BankOnline.Models
         public virtual BankAccount From { get; set; }
         public virtual BankAccount To { get; set; }
 
+        public bool Defined { get; set; }
+
     }
 }

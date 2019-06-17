@@ -24,6 +24,10 @@
         <th>
             @Html.DisplayNameFor(model => model.Amount)
         </th>
+
+        <th>
+            Action
+        </th>
         @if (Context.User.IsInRole("ADMIN"))
         {
 
@@ -31,30 +35,39 @@
         }
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.From.Number)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.To.Number)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TransactionDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Amount)
-        </td>
-        @if (Context.User.IsInRole("ADMIN"))
-        {
+    @foreach (var item in Model.OrderBy(e => !e.Defined))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.From.Number)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.To.Number)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransactionDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
 
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                @if (item.Defined)
+                {
+                    @Html.ActionLink("Create defined transaction", "Defined", new { id = item.ID }) @:|
+                    @Html.ActionLink("Delete defined transaction", "DeleteDefined", new { id = item.ID }) 
+                }
             </td>
-        }
-    </tr>
-}
+            @if (Context.User.IsInRole("ADMIN"))
+            {
+
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                </td>
+            }
+        </tr>
+    }
 
 </table>

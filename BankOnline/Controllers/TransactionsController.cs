@@ -51,17 +51,19 @@ namespace BankOnline.Controllers
         [Authorize]
         public ActionResult Create()
         {
+            ViewBag.History = db.BankAccounts.Where(e => e.Profile.UserName == User.Identity.Name).Select(e => e.TransactionFrom);
             ViewBag.FromID = new SelectList(db.BankAccounts.Where(e => e.Profile.UserName == User.Identity.Name), "ID", "Number");
             ViewBag.ToID = new SelectList(db.BankAccounts, "ID", "Number");
             return View();
         }
+
 
         // POST: Transactions/Create
         // Aby zapewnić ochronę przed atakami polegającymi na przesyłaniu dodatkowych danych, włącz określone właściwości, z którymi chcesz utworzyć powiązania.
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,TransactionDate,FromID,ToID,Amount")] Transaction transaction)
+        public ActionResult Create([Bind(Include = "ID,TransactionDate,FromID,ToID,Amount,Defined")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
@@ -74,10 +76,69 @@ namespace BankOnline.Controllers
                 fr.Balance -= transaction.Amount;
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
-                SendMail(target.Profile.UserName, "You received transfer", "You have new transaction. Visit us to check. Virtual bank");
+                Profile current = db.Profiles.Single(e => e.UserName == User.Identity.Name);
+                if (current.EnableMail)
+                    SendMail(target.Profile.UserName, "You received transfer", "You have new transaction. Visit us to check. Virtual bank");
                 return RedirectToAction("Index");
             }
 
+            ViewBag.FromID = new SelectList(db.BankAccounts, "ID", "Number", transaction.FromID);
+            ViewBag.ToID = new SelectList(db.BankAccounts, "ID", "Number", transaction.ToID);
+            return View(transaction);
+        }
+
+        public ActionResult DeleteDefined(int? id)
+        {
+            db.Transactions.Find(id).Defined = false;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        // GET: Transactions/Defined/5
+        public ActionResult Defined(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Transaction transaction = db.Transactions.Find(id);
+            Transaction newTrans = new Transaction();
+            newTrans.From = transaction.From;
+            newTrans.To = transaction.To;
+            newTrans.Defined = false;
+
+            if (transaction == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.FromID = new SelectList(db.BankAccounts.Where(e => e.Profile.UserName == User.Identity.Name), "ID", "Number", transaction.FromID);
+            ViewBag.ToID = new SelectList(db.BankAccounts, "ID", "Number", transaction.ToID);
+            return View(newTrans);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Defined([Bind(Include = "ID,TransactionDate,FromID,ToID,Amount,Defined")] Transaction transaction)
+        {
+            if (ModelState.IsValid)
+            {
+                transaction.Defined = false;
+                transaction.TransactionDate = DateTime.Now;
+                BankAccount fr = db.BankAccounts.Single(e => e.ID == transaction.FromID);
+                BankAccount target = db.BankAccounts.Single(e => e.ID == transaction.ToID);
+                if (fr.Balance < transaction.Amount)
+                    return RedirectToAction("Index");
+                target.Balance += transaction.Amount;
+                fr.Balance -= transaction.Amount;
+                db.Transactions.Add(transaction);
+                db.SaveChanges();
+                Profile current = db.Profiles.Single(e => e.UserName == User.Identity.Name);
+                if (current.EnableMail)
+                    SendMail(target.Profile.UserName, "You received transfer", "You have new transaction. Visit us to check. Virtual bank");
+
+                db.Entry(transaction).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
             ViewBag.FromID = new SelectList(db.BankAccounts, "ID", "Number", transaction.FromID);
             ViewBag.ToID = new SelectList(db.BankAccounts, "ID", "Number", transaction.ToID);
             return View(transaction);
@@ -169,7 +230,7 @@ namespace BankOnline.Controllers
                     ConfigurationManager.AppSettings["passwd"]),
                 EnableSsl = true
             };
-            smtpClient.Port = 587; 
+            smtpClient.Port = 587;
             smtpClient.Send(message);
         }
     }

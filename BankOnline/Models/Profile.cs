@@ -19,6 +19,8 @@ namespace BankOnline.Models
         [StringLength(50)]
         public string Surname { get; set; }
 
+        public bool EnableMail { get; set; }
+
         public virtual ICollection<BankAccount> BankAccounts { get; set; }
     }
 }

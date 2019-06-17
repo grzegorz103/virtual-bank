@@ -69,7 +69,7 @@ namespace BankOnline.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult My([Bind(Include = "ID,UserName,Name,Surname")] Profile profile)
+        public ActionResult My([Bind(Include = "ID,UserName,Name,Surname,EnableMail")] Profile profile)
         {
             if (ModelState.IsValid)
             {

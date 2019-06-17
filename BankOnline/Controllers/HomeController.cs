@@ -48,9 +48,9 @@ namespace BankOnline.Controllers
             return View(data.ToList());
         }
 
-        public ActionResult Contact()
+        public ActionResult Summary()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.BankAccounts = db.BankAccounts.Where(e => e.Profile.UserName == User.Identity.Name).ToList() ;
 
             return View();
         }
