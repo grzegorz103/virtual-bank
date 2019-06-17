@@ -23,11 +23,11 @@ namespace BankOnline.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public void UpdateDB()
         {
             IQueryable<Investment> investments = db.Investments
-             .Include(i => i.BankAccount)
-             .Include(i => i.InvestmentType);
+           .Include(i => i.BankAccount)
+           .Include(i => i.InvestmentType);
             investments.ToList().ForEach(e =>
             {
                 DateTime date = DateTime.Now;
@@ -37,6 +37,11 @@ namespace BankOnline.Controllers
                 e.VisitDate = date;
             });
             db.SaveChanges();
+        }
+
+        public ActionResult About()
+        {
+            UpdateDB();
 
             IQueryable<InvestmentGroup> data = from investment in db.Investments
                                                group investment by investment.InvestmentType into invGroup
@@ -50,7 +55,31 @@ namespace BankOnline.Controllers
 
         public ActionResult Summary()
         {
-            ViewBag.BankAccounts = db.BankAccounts.Where(e => e.Profile.UserName == User.Identity.Name).ToList() ;
+            UpdateDB();
+            ViewBag.BankAccounts = db.BankAccounts
+                .Where(e => e.Profile.UserName == User.Identity.Name)
+                .ToList();
+
+            ViewBag.Total = db.BankAccounts
+                .Where(e => e.Profile.UserName == User.Identity.Name)
+                .Select(e => e.Balance)
+                .DefaultIfEmpty(0f)
+                .Sum();
+
+            ViewBag.Credits = db.BankAccounts
+                .Where(e => e.Profile.UserName == User.Identity.Name)
+                .SelectMany(e => e.Credits)
+                .ToList();
+
+            ViewBag.Investments = db.Investments
+                .Where(e => e.BankAccount.Profile.UserName == User.Identity.Name)
+                .ToList();
+
+            ViewBag.TotalInv = db.Investments
+                .Where(e => e.BankAccount.Profile.UserName == User.Identity.Name)
+                .Select(e => e.Balance)
+                .DefaultIfEmpty(0f)
+                .Sum();
 
             return View();
         }

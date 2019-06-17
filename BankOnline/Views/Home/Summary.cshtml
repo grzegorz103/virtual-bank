@@ -1,3 +1,159 @@
-﻿@{
+﻿@model BankOnline.Models.BankAccount
+
+@{
     ViewBag.Title = "Summary";
 }
+
+
+<h2>Welcome</h2>
+<h4>Your bank accounts</h4>
+<h4>Total balance of all accounts: @ViewBag.Total zł</h4>
+<p>
+    @Html.ActionLink("Click here to create new bank account", "Create", "BankAccounts")
+</p>
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.ActionLink("Number", "Index", new { sortOrder = ViewBag.NumberSortParam, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Balance", "Index", new { sortOrder = ViewBag.BalanceSortParam, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            Details
+        </th>
+    </tr>
+    @foreach (var item in ViewBag.BankAccounts)
+    {
+        <tr>
+            <td>
+                @item.Number
+            </td>
+            <td>
+                @item.Balance
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", "BankAccounts", new { id = item.ID }, null)
+            </td>
+        </tr>
+    }
+</table>
+<br />
+<div style="border-top:1px solid black"></div>
+
+<h4>Your credits</h4>
+<p>
+    @Html.ActionLink("Click here to create new credit", "Create", "Credits")
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            Bank account number
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Balance)
+        </th>
+        <th>
+            Balance paid
+        </th>
+
+        <th>
+            Status date
+        </th>
+        <th>
+            Credit status
+        </th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in ViewBag.Credits)
+    {
+        <tr>
+            <td>
+                @item.BankAccount.Number
+            </td>
+            <td>
+                @item.Balance
+            </td>
+            <td>
+                @item.BalancePaid
+            </td>
+
+            <td>
+                @item.StatusDate
+            </td>
+            <td>
+                @if (item.CreditType == BankOnline.Models.CreditType.ACCEPTED)
+                {
+                    @:Accepted
+                }
+                else if (item.CreditType == BankOnline.Models.CreditType.AWAITING)
+                {
+                    @:Awaiting
+                }
+                else if (item.CreditType == BankOnline.Models.CreditType.PAID)
+                {
+                    @:Repaid
+                }
+                else
+                {
+                    @:Rejected
+                }
+            </td>
+            <td>
+                @if (item.CreditType == BankOnline.Models.CreditType.ACCEPTED)
+                {
+                <td>
+                    @Html.ActionLink("Details", "Details", "Credits", new { id = item.ID }, null)
+                </td>
+            }
+            </tr>
+        }
+</table>
+
+<div style="border-top:1px solid black"></div>
+
+<h4>Your investments</h4>
+<h4>Total balance located on investments: @ViewBag.TotalInv zł</h4>
+
+
+<p>
+    @Html.ActionLink("Create new investment", "Create", "Investments")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Bank account number
+        </th>
+        <th>
+            Investment name
+        </th>
+        <th>
+            Balance
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in ViewBag.Investments)
+    {
+        <tr>
+            <td>
+                @item.BankAccount.Number
+            </td>
+            <td>
+                @item.InvestmentType.Name
+            </td>
+            <td>
+                @item.Balance
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", "Investments" , new { id = item.ID }, null) |
+                @Html.ActionLink("Delete", "Delete", "Investments", new { id = item.ID }, null)
+            </td>
+        </tr>
+    }
+
+</table>

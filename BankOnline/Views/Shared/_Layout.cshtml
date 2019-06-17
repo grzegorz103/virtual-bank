@@ -35,6 +35,7 @@
                     }
                     @if (Context.User.Identity.IsAuthenticated && !Context.User.IsInRole("ADMIN"))
                     {
+                        <li>@Html.ActionLink("Summary", "Summary", "Home")</li>
                         <li>@Html.ActionLink("Transactions", "Index", "Transactions")</li>
                         <li>@Html.ActionLink("My bank accounts", "MyList", "BankAccounts")</li>
                         <li>@Html.ActionLink("Investments", "Index", "Investments")</li>
