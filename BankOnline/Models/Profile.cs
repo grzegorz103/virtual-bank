@@ -22,5 +22,6 @@ namespace BankOnline.Models
         public bool EnableMail { get; set; }
 
         public virtual ICollection<BankAccount> BankAccounts { get; set; }
+        public virtual ICollection<DefinedTransfer> DefinedTransfers { get; set; }
     }
 }

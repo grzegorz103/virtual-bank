@@ -24,7 +24,6 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Informations", "About", "Home")</li>
                     @if (Context.User.IsInRole("ADMIN"))
                     {
                         <li>@Html.ActionLink("Bank accounts", "Index", "BankAccounts")</li>
@@ -35,7 +34,10 @@
                     }
                     @if (Context.User.Identity.IsAuthenticated && !Context.User.IsInRole("ADMIN"))
                     {
+
                         <li>@Html.ActionLink("Summary", "Summary", "Home")</li>
+                        <li>@Html.ActionLink("Defined", "Index", "DefinedTransfers")</li>
+
                         <li>@Html.ActionLink("Transactions", "Index", "Transactions")</li>
                         <li>@Html.ActionLink("My bank accounts", "MyList", "BankAccounts")</li>
                         <li>@Html.ActionLink("Investments", "Index", "Investments")</li>

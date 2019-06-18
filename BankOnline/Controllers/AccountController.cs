@@ -23,7 +23,7 @@ namespace BankOnline.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -35,9 +35,9 @@ namespace BankOnline.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -88,6 +88,7 @@ namespace BankOnline.Controllers
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Nieprawidłowa próba logowania.");
+
                     return View(model);
             }
         }
@@ -121,7 +122,7 @@ namespace BankOnline.Controllers
             // Jeśli użytkownik będzie wprowadzać niepoprawny kod przez określoną ilość czasu, konto użytkownika 
             // zostanie zablokowane na określoną ilość czasu. 
             // Możesz skonfigurować ustawienia blokady konta w elemencie IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -156,7 +157,7 @@ namespace BankOnline.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     // Aby uzyskać więcej informacji o sposobie włączania potwierdzania konta i resetowaniu hasła, odwiedź stronę https://go.microsoft.com/fwlink/?LinkID=320771
                     // Wyślij wiadomość e-mail z tym łączem
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -452,7 +453,7 @@ namespace BankOnline.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Summary", "Home");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

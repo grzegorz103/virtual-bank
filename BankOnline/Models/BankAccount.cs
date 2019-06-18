@@ -21,5 +21,8 @@ namespace BankOnline.Models
         public virtual ICollection<Transaction> TransactionFrom { get; set; }
         public virtual ICollection<Transaction> TransactionTo { get; set; }
         public virtual ICollection<Credit> Credits { get; set; }
+
+        public virtual ICollection<DefinedTransfer> TransferFrom { get; set; }
+        public virtual ICollection<DefinedTransfer> TransferTo { get; set; }
     }
 }

@@ -1,0 +1,54 @@
+﻿@model IEnumerable<BankOnline.Models.DefinedTransfer>
+
+@{
+    ViewBag.Title = "My defined transfers";
+}
+
+<h2>My defined transfers</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Source bank account
+        </th>
+     
+        <th>
+          Destinated bank account
+    
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.From.Number)
+        </td>
+      
+        <td>
+            @Html.DisplayFor(modelItem => item.To.Number)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.ActionLink("Make transfer!","NewTrans", new { id = item.ID } )
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>

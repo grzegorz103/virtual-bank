@@ -9,6 +9,22 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+@using (Html.BeginForm())
+{
+<p>
+    <h3> Filter by:<br /></h3>
+    Date from @Html.TextBox("DateFrom", ViewBag.DateFrom as string, new { @type = "date" }) to @Html.TextBox("DateTo", ViewBag.DateFrom as string, new { @type = "date" })
+    <br />
+    Balance from @Html.TextBox("BalanceFrom", ViewBag.BalanceFrom as string) to @Html.TextBox("BalanceTo", ViewBag.BalanceTo as string)
+    <br />
+    @Html.RadioButton("Incoming", "incoming") Incoming only
+    <br/>
+    @Html.RadioButton("Incoming", "outcoming") Outgoing only
+   <br/> @Html.RadioButton("Incoming", "all") All<br/>
+    <input type="submit" value="Search" />
+</p>
+}
 <table class="table">
     <tr>
         <th>
@@ -25,9 +41,8 @@
             @Html.DisplayNameFor(model => model.Amount)
         </th>
 
-        <th>
-            Action
-        </th>
+        <th>Title</th>
+
         @if (Context.User.IsInRole("ADMIN"))
         {
 
@@ -35,7 +50,7 @@
         }
     </tr>
 
-    @foreach (var item in Model.OrderBy(e => !e.Defined))
+    @foreach (var item in Model)
     {
         <tr>
             <td>
@@ -50,14 +65,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Amount)
             </td>
-
+            <td>@Html.DisplayFor(m => item.Title)</td>
+            <!--
             <td>
                 @if (item.Defined)
                 {
                     @Html.ActionLink("Create defined transaction", "Defined", new { id = item.ID }) @:|
-                    @Html.ActionLink("Delete defined transaction", "DeleteDefined", new { id = item.ID }) 
+                    @Html.ActionLink("Delete defined transaction", "DeleteDefined", new { id = item.ID })
                 }
-            </td>
+            </td>-->
             @if (Context.User.IsInRole("ADMIN"))
             {
 
@@ -71,3 +87,5 @@
     }
 
 </table>
+
+

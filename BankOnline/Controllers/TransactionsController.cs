@@ -18,14 +18,69 @@ namespace BankOnline.Controllers
 
         // GET: Transactions
         [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string currentFilter, DateTime? DateFrom, DateTime? DateTo, float? BalanceFrom, float? BalanceTo, string Incoming, int? page,
+         DateTime? DateFrom2, DateTime? DateTo2, float? BalanceFrom2, float? BalanceTo2, string Incoming2)
         {
-            IQueryable transactions;
+            ViewBag.DateSort = sortOrder == "date" ? "date" : "date_desc";
+            IQueryable<Transaction> transactions;
             if (User.IsInRole("ADMIN"))
                 transactions = db.Transactions.Include(t => t.From).Include(t => t.To);
             else
                 transactions = db.Transactions.Include(t => t.From).Include(t => t.To)
             .Where(e => e.To.Profile.UserName == User.Identity.Name || e.From.Profile.UserName == User.Identity.Name);
+
+            if (currentFilter != null || DateFrom != null || DateTo != null || BalanceFrom != null || BalanceTo != null || Incoming != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                DateFrom = DateFrom2;
+                DateTo = DateTo2;
+                BalanceFrom = BalanceFrom2;
+                BalanceTo = BalanceTo2;
+                Incoming = Incoming2;
+            }
+
+            if (!String.IsNullOrEmpty(Incoming) && Incoming != "all")
+            {
+                if (Incoming == "incoming")
+                {
+                    transactions = transactions.Where(e => e.To.Profile.UserName == User.Identity.Name);
+                }
+                else if (Incoming == "outcoming")
+                {
+                    transactions = transactions.Where(e => e.From.Profile.UserName == User.Identity.Name);
+                }
+            }
+
+            if (BalanceFrom != null)
+                transactions = transactions.Where(e => e.Amount >= BalanceFrom);
+
+            if (BalanceTo != null)
+                transactions = transactions.Where(e => e.Amount <= BalanceTo);
+
+            if (DateFrom != null)
+                transactions = transactions.Where(e => e.TransactionDate >= DateFrom);
+
+            if (DateTo != null)
+                transactions = transactions.Where(e => e.TransactionDate <= DateTo);
+
+            switch (sortOrder)
+            {
+                case "date":
+                    transactions = transactions.OrderByDescending(s => s.TransactionDate);
+                    break;
+                case "date_desc":
+                    transactions = transactions.OrderBy(s => s.TransactionDate);
+                    break;
+                default:
+                    transactions = transactions.OrderByDescending(s => s.TransactionDate);
+                    break;
+            }
+            
+            int pageSize = 2;
+            int pageNumber = (page ?? 1);
 
             return View(transactions);
         }
@@ -63,7 +118,7 @@ namespace BankOnline.Controllers
         // Aby uzyskać więcej szczegółów, zobacz https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,TransactionDate,FromID,ToID,Amount,Defined")] Transaction transaction)
+        public ActionResult Create([Bind(Include = "ID,TransactionDate,FromID,ToID,Amount,Defined,Title")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
@@ -74,6 +129,19 @@ namespace BankOnline.Controllers
                     return RedirectToAction("Index");
                 target.Balance += transaction.Amount;
                 fr.Balance -= transaction.Amount;
+
+                if (transaction.Defined)
+                {
+                    db.DefinedTransfers.Add(new DefinedTransfer
+                    {
+                        From = fr,
+                        To = target,
+                        Amount = transaction.Amount,
+                        Title = transaction.Title,
+                        Profile = db.Profiles.Single(e => e.UserName == User.Identity.Name)
+                    });
+                }
+
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
                 Profile current = db.Profiles.Single(e => e.UserName == User.Identity.Name);
@@ -104,6 +172,8 @@ namespace BankOnline.Controllers
             Transaction newTrans = new Transaction();
             newTrans.From = transaction.From;
             newTrans.To = transaction.To;
+            newTrans.Title = transaction.Title;
+
             newTrans.Defined = false;
 
             if (transaction == null)
@@ -117,7 +187,7 @@ namespace BankOnline.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Defined([Bind(Include = "ID,TransactionDate,FromID,ToID,Amount,Defined")] Transaction transaction)
+        public ActionResult Defined([Bind(Include = "ID,TransactionDate,FromID,ToID,Amount,Defined,Title")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {

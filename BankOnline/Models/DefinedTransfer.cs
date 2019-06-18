@@ -6,12 +6,10 @@ using System.Web;
 
 namespace BankOnline.Models
 {
-    public class Transaction
+    public class DefinedTransfer
     {
         public int ID { get; set; }
-        
-        [DataType(DataType.Date)]
-        public DateTime TransactionDate { get; set; }
+
         public int? FromID { get; set; }
         public int? ToID { get; set; }
 
@@ -22,8 +20,9 @@ namespace BankOnline.Models
 
         [MinLength(3)]
         public string Title { get; set; }
+        public int ProfileID { get; set; }
+        public virtual Profile Profile { get; set; }
 
-        public bool Defined { get; set; }
 
     }
 }

@@ -176,6 +176,7 @@
     <Compile Include="Controllers\BankAccountsController.cs" />
     <Compile Include="Controllers\CreditCardsController.cs" />
     <Compile Include="Controllers\CreditsController.cs" />
+    <Compile Include="Controllers\DefinedTransfersController.cs" />
     <Compile Include="Controllers\InvestmentsController.cs" />
     <Compile Include="Controllers\ProfilesController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="Models\Credit.cs" />
     <Compile Include="Models\CreditCard.cs" />
     <Compile Include="Models\CreditType.cs" />
+    <Compile Include="Models\DefinedTransfer.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Investment.cs" />
     <Compile Include="Models\InvestmentGroup.cs" />
@@ -302,6 +304,12 @@
     <Content Include="Views\Profiles\My.cshtml" />
     <Content Include="Views\Profiles\MyProfile.cshtml" />
     <Content Include="Views\Transactions\Defined.cshtml" />
+    <Content Include="Views\DefinedTransfers\Create.cshtml" />
+    <Content Include="Views\DefinedTransfers\Delete.cshtml" />
+    <Content Include="Views\DefinedTransfers\Details.cshtml" />
+    <Content Include="Views\DefinedTransfers\Edit.cshtml" />
+    <Content Include="Views\DefinedTransfers\Index.cshtml" />
+    <Content Include="Views\DefinedTransfers\NewTrans.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

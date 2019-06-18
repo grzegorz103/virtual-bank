@@ -42,6 +42,7 @@ namespace BankOnline
 
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
-        
+
+        public System.Data.Entity.DbSet<BankOnline.Models.DefinedTransfer> DefinedTransfers { get; set; }
     }
 }
