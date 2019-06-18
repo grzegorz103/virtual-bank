@@ -1,6 +1,10 @@
-﻿@model IEnumerable<BankOnline.Models.Transaction>
+﻿@model PagedList.IPagedList<BankOnline.Models.Transaction>
+@using PagedList.Mvc;
 
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
+    /**/
+
     ViewBag.Title = "Index";
 }
 
@@ -12,33 +16,32 @@
 
 @using (Html.BeginForm())
 {
-<p>
-    <h3> Filter by:<br /></h3>
-    Date from @Html.TextBox("DateFrom", ViewBag.DateFrom as string, new { @type = "date" }) to @Html.TextBox("DateTo", ViewBag.DateFrom as string, new { @type = "date" })
-    <br />
-    Balance from @Html.TextBox("BalanceFrom", ViewBag.BalanceFrom as string) to @Html.TextBox("BalanceTo", ViewBag.BalanceTo as string)
-    <br />
-    @Html.RadioButton("Incoming", "incoming") Incoming only
-    <br/>
-    @Html.RadioButton("Incoming", "outcoming") Outgoing only
-   <br/> @Html.RadioButton("Incoming", "all") All<br/>
-    <input type="submit" value="Search" />
-</p>
+    <p>
+        <h3> Filter by:<br /></h3>
+        Date from @Html.TextBox("DateFrom", ViewBag.DateFrom as string, new { @type = "date" }) to @Html.TextBox("DateTo", ViewBag.DateFrom as string, new { @type = "date" })
+        <br />
+        Balance from @Html.TextBox("BalanceFrom", ViewBag.BalanceFrom as string) to @Html.TextBox("BalanceTo", ViewBag.BalanceTo as string)
+        <br />
+        @Html.RadioButton("Incoming", "incoming") Incoming only
+        <br />
+        @Html.RadioButton("Incoming", "outcoming") Outgoing only
+        <br /> @Html.RadioButton("Incoming", "all") All<br />
+        <input type="submit" value="Search" />
+    </p>
 }
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.From.Number)
+            Source bank account
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.To.Number)
+            Destinated bank account
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TransactionDate)
+            @Html.ActionLink("Transaction date", "Index", new { sortOrder = ViewBag.DateSort, currentFilter = ViewBag.CurrentFilter, DateFrom = ViewBag.DateFrom, DateTo = ViewBag.DateTo, BalanceFrom = ViewBag.BalanceFrom, BalanceTo = ViewBag.BalanceTo,Incoming =  ViewBag.Incoming })
         </th>
-
         <th>
-            @Html.DisplayNameFor(model => model.Amount)
+       Amount
         </th>
 
         <th>Title</th>
@@ -66,6 +69,7 @@
                 @Html.DisplayFor(modelItem => item.Amount)
             </td>
             <td>@Html.DisplayFor(m => item.Title)</td>
+
             <!--
             <td>
                 @if (item.Defined)
@@ -89,3 +93,6 @@
 </table>
 
 
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

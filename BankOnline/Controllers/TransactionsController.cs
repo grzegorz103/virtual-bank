@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using BankOnline;
 using BankOnline.Models;
+using PagedList;
 
 namespace BankOnline.Controllers
 {
@@ -21,6 +22,11 @@ namespace BankOnline.Controllers
         public ActionResult Index(string sortOrder, string currentFilter, DateTime? DateFrom, DateTime? DateTo, float? BalanceFrom, float? BalanceTo, string Incoming, int? page,
          DateTime? DateFrom2, DateTime? DateTo2, float? BalanceFrom2, float? BalanceTo2, string Incoming2)
         {
+            ViewBag.DateFrom = DateFrom;
+            ViewBag.DateTo = DateTo;
+            ViewBag.BalanceFrom = BalanceFrom;
+            ViewBag.BalanceTo = BalanceTo;
+            ViewBag.Incoming = Incoming;
             ViewBag.DateSort = sortOrder == "date" ? "date" : "date_desc";
             IQueryable<Transaction> transactions;
             if (User.IsInRole("ADMIN"))
@@ -79,10 +85,10 @@ namespace BankOnline.Controllers
                     break;
             }
             
-            int pageSize = 2;
+            int pageSize = 3;
             int pageNumber = (page ?? 1);
 
-            return View(transactions);
+            return View(transactions.ToPagedList(pageNumber, pageSize));
         }
 
 
